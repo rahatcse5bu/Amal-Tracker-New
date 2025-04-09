@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "F:\\flutter\\flutter_windows_3.16.9-stable\\flutter\\packages\\flutter_tools\\gradle\\src\\main\\groovy\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\rahat\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "C:\\Users\\rahat\\OneDrive\\Desktop\\PNC_Soft_Tech\\Ramadan Tracker\\ramadan_tracker\\android\\app\\.cxx\\Debug\\4q5r5y6m\\x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\rahat\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "C:\\Users\\rahat\\OneDrive\\Desktop\\PNC_Soft_Tech\\Ramadan Tracker\\ramadan_tracker\\android\\app\\.cxx\\Debug\\4q5r5y6m\\x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

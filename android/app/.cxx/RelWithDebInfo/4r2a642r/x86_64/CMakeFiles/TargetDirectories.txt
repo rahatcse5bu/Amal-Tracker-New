@@ -1,0 +1,2 @@
+C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/ramadan_tracker/android/app/.cxx/RelWithDebInfo/4r2a642r/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/ramadan_tracker/android/app/.cxx/RelWithDebInfo/4r2a642r/x86_64/CMakeFiles/rebuild_cache.dir

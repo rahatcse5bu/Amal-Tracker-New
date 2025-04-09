@@ -16,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _identifierController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
-  LocalStorage storage = new LocalStorage('ramadan_tracker');
+  LocalStorage storage = new LocalStorage('amal_tracker');
   Future<void> _login() async {
     setState(() {
       _isLoading = true;
@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Container(
               color: AppColors.primary,
-              child: Image.asset("images/Ramadan_Tracker.png")),
+              child: Image.asset("images/amal_tracker.png")),
             TextFormField(
               controller: _identifierController,
               decoration: InputDecoration(

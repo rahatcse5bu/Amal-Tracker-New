@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:ramadan_tracker/app/routes/app_pages.dart';
-import 'package:ramadan_tracker/modules/login/controller/login_controller.dart';
+import 'package:amal_tracker/app/routes/app_pages.dart';
+import 'package:amal_tracker/modules/login/controller/login_controller.dart';
 
 import '../../../app/common/widgets/cuatom_text_field_widget.dart';
 import '../../../app/constants/app_color.dart';
@@ -29,7 +29,7 @@ class LoginView extends GetView<LoginController> {
                   decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(15.3.r)),
-                  child: Image.asset("images/Ramadan_Tracker.png")),
+                  child: Image.asset("images/amal_tracker.png")),
               SizedBox(height: 20.h),
               CustomTextField(
                 controller: controller.identifierController,

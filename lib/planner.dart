@@ -7,9 +7,9 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hijri/hijri_calendar.dart';
-import 'package:ramadan_tracker/InputTracking.dart';
-import 'package:ramadan_tracker/Tracking-Old.dart';
-import 'package:ramadan_tracker/login.dart';
+import 'package:amal_tracker/InputTracking.dart';
+import 'package:amal_tracker/Tracking-Old.dart';
+import 'package:amal_tracker/login.dart';
 import 'Credit.dart';
 import 'Data/data.dart';
 import 'PlannerController.dart';
@@ -54,7 +54,7 @@ class _RamadanPlannerState extends State<RamadanPlanner> {
   bool isLoadingAyat = true;
   bool isLoadingPoint = true;
   Timer? _timer;
-  final LocalStorage storage = LocalStorage('ramadan_tracker');
+  final LocalStorage storage = LocalStorage('amal_tracker');
   final PlannerController plannerController = Get.put(PlannerController());
 
   // Future<int> fetchTodaysPoint() async {

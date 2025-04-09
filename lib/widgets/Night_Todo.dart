@@ -164,7 +164,7 @@ class NightTrackingPage extends StatefulWidget {
 }
 
 class _NightTrackingPageState extends State<NightTrackingPage> {
-  final LocalStorage storage = LocalStorage('ramadan_tracker');
+  final LocalStorage storage = LocalStorage('amal_tracker');
   Future<List<dynamic>>? trackingOptionsFuture;
 Future<List<dynamic>> fetchTrackingOptions() async {
   final response = await http.get(

@@ -29,7 +29,7 @@ class RegisterView extends GetView<RegisterController> {
                   decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(15.3.r)),
-                  child: Image.asset("images/Ramadan_Tracker.png")),
+                  child: Image.asset("images/amal_tracker.png")),
                   SizedBox(height: 16.h),
               CustomTextField(
                 controller: controller.usernameController,

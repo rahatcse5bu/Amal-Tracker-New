@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ramadan_tracker/Data/data.dart';
+import 'package:amal_tracker/Data/data.dart';
 
 import '../../../app/common/utils/ramadan_utils.dart';
 import '../../../app/constants/app_color.dart';

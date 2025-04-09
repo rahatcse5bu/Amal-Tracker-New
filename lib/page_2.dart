@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // For JSON decoding
 
-import 'package:ramadan_tracker/colors.dart';
-import 'package:ramadan_tracker/login.dart';
-import 'package:ramadan_tracker/main.dart';
+import 'package:amal_tracker/colors.dart';
+import 'package:amal_tracker/login.dart';
+import 'package:amal_tracker/main.dart';
 
 class Borjoniyo extends StatefulWidget {
   const Borjoniyo({super.key});

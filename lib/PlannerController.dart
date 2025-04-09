@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:localstorage/localstorage.dart';
 
 class PlannerController extends GetxController {
-  final LocalStorage storage = LocalStorage('ramadan_tracker');
+  final LocalStorage storage = LocalStorage('amal_tracker');
   var todaysPoint = 0.obs; // Observable for today's points
   var isLoadingPoint = true.obs; // Observable for loading state
   var userRank = 0.obs; // Observable for user rank state

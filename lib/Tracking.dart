@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:ramadan_tracker/planner.dart';
+import 'package:amal_tracker/planner.dart';
 
 import 'PlannerController.dart';
 import 'colors.dart';
@@ -26,7 +26,7 @@ class TrackingOld extends StatefulWidget {
 
 class _TrackingOldState extends State<TrackingOld> {
   final PlannerController plannerController = Get.put(PlannerController());
-  final LocalStorage storage = LocalStorage('ramadan_tracker');
+  final LocalStorage storage = LocalStorage('amal_tracker');
   Future<List<dynamic>>? trackingOptionsFuture;
   Map<String, bool> loadingStates = {};
 

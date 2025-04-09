@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:ramadan_tracker/login.dart'; // Assuming this is your login screen
-import 'package:ramadan_tracker/main.dart';
+import 'package:amal_tracker/login.dart'; // Assuming this is your login screen
+import 'package:amal_tracker/main.dart';
 import 'splash.dart'; // Assuming this is your splash screen
 
 
@@ -13,7 +13,7 @@ class InitData extends StatefulWidget {
 }
 
 class _InitDataState extends State<InitData> {
-  final LocalStorage storage = LocalStorage('ramadan_tracker');
+  final LocalStorage storage = LocalStorage('amal_tracker');
 
   @override
   void initState() {

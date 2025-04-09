@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:ramadan_tracker/app/common/storage/storage_controller.dart';
+import 'package:amal_tracker/app/common/storage/storage_controller.dart';
 import '../../../app/apis/api_helper.dart';
 
 class UserPointsController extends GetxController {
-  final LocalStorage storage = LocalStorage('ramadan_tracker');
+  final LocalStorage storage = LocalStorage('amal_tracker');
   final ApiHelper _apiHelper = Get.find<ApiHelper>();
 
   var todaysPoint = 0.obs;

@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/connect.dart';
 import 'package:http/http.dart' as http;
-import 'package:ramadan_tracker/modules/dus-list/models/dua_model.dart';
+import 'package:amal_tracker/modules/dus-list/models/dua_model.dart';
 import '../../modules/borjoniyo/models/borjoniyo_model.dart';
 import '../../modules/dashboard/models/user_model.dart';
 import '../../modules/koroniyo/models/koroniyo_model.dart';

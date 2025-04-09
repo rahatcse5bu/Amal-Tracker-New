@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:ramadan_tracker/colors.dart';
+import 'package:amal_tracker/colors.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override

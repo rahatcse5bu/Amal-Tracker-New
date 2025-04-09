@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ramadan_tracker/app/routes/app_pages.dart';
+import 'package:amal_tracker/app/routes/app_pages.dart';
 import '../../../app/apis/api_helper.dart';
 import '../../../app/constants/app_color.dart';
 import '../models/register_model.dart';

@@ -1,6 +1,6 @@
 {
-    "name": "ramadan_tracker",
-    "short_name": "ramadan_tracker",
+    "name": "amal_tracker",
+    "short_name": "amal_tracker",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

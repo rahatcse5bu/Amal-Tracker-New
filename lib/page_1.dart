@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // For json decoding
 
-import 'package:ramadan_tracker/colors.dart';
+import 'package:amal_tracker/colors.dart';
 
 import 'page_2.dart';
 

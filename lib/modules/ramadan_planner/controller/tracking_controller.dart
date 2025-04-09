@@ -14,7 +14,7 @@ class TrackingController extends GetxController {
   final String type; // "checkbox" or "switch"
 
   final ApiHelper apiHelper = Get.find<ApiHelper>();
-  final LocalStorage storage = LocalStorage('ramadan_tracker');
+  final LocalStorage storage = LocalStorage('amal_tracker');
   final RamadanPlannerController _ramadanController = Get.find();
   // Observables
   var trackingOptions = <dynamic>[].obs;

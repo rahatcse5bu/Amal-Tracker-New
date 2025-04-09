@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/ramadan_tracker/android/app/.cxx/RelWithDebInfo/4n1y2v2z/arm64-v8a/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/amal_tracker/android/app/.cxx/RelWithDebInfo/4n1y2v2z/arm64-v8a/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

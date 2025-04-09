@@ -17,7 +17,7 @@ class InputTracking extends StatefulWidget {
 }
 
 class _InputTrackingState extends State<InputTracking> {
-  final LocalStorage storage = LocalStorage('ramadan_tracker');
+  final LocalStorage storage = LocalStorage('amal_tracker');
   List<Map<String, dynamic>> trackingOptions = [];
   bool isLoading = true;
 String generateUniqueId() {

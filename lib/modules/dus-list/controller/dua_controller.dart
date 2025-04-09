@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:ramadan_tracker/modules/dus-list/models/dua_model.dart';
+import 'package:amal_tracker/modules/dus-list/models/dua_model.dart';
 import '../../../app/apis/api_helper.dart';
 
 class DuaController extends GetxController {

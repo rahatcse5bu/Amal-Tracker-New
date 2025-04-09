@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ramadan_tracker/app/common/storage/storage_controller.dart';
-import 'package:ramadan_tracker/modules/dashboard/controller/user_points_controller.dart';
+import 'package:amal_tracker/app/common/storage/storage_controller.dart';
+import 'package:amal_tracker/modules/dashboard/controller/user_points_controller.dart';
 
 import '../../../app/constants/app_color.dart';
 import '../../../app/translation/language_controller.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:ramadan_tracker/modules/dus-list/models/dua_model.dart';
+import 'package:amal_tracker/modules/dus-list/models/dua_model.dart';
 import '../../../app/common/widgets/custom_appbar_widget.dart';
 import '../../../app/constants/app_color.dart';
 import '../controller/dua_controller.dart';

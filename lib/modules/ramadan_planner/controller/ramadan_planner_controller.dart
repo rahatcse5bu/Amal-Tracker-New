@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:hijri/hijri_calendar.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ramadan_tracker/app/common/storage/storage_controller.dart';
+import 'package:amal_tracker/app/common/storage/storage_controller.dart';
 
 import '../../../app/apis/api_helper.dart';
 import '../../../app/common/models/ayat_model.dart';
@@ -16,7 +16,7 @@ import '../models/ayat_model.dart';
 
 class RamadanPlannerController extends GetxController {
   // Storage and API calls can also be abstracted via an ApiHelper.
-  final LocalStorage storage = LocalStorage('ramadan_tracker');
+  final LocalStorage storage = LocalStorage('amal_tracker');
 
   // Observables for data
   // var ajkerHadith = ''.obs;

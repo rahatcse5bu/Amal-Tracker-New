@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:ramadan_tracker/app/constants/app_color.dart';
+import 'package:amal_tracker/app/constants/app_color.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../apis/api_helper.dart';

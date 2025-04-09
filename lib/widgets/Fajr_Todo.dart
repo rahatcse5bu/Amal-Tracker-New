@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:ramadan_tracker/colors.dart';
-import 'package:ramadan_tracker/Data/data.dart';
+import 'package:amal_tracker/colors.dart';
+import 'package:amal_tracker/Data/data.dart';
 
 import '../Data/localStorageFunc.dart';
 

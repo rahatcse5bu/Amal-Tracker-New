@@ -15,7 +15,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final LocalStorage storage = LocalStorage('ramadan_tracker');
+  final LocalStorage storage = LocalStorage('amal_tracker');
   final AppUpdateController updateController = Get.find<AppUpdateController>();
 
   // @override
@@ -76,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'images/Ramadan_Tracker.png',
+                'images/amal_tracker.png',
                 height: 80,
                 width: MediaQuery.of(context).size.width * 0.5,
               ),

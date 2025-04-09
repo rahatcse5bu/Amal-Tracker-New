@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:ramadan_tracker/app/common/storage/storage_controller.dart';
-import 'package:ramadan_tracker/app/common/utils/ramadan_utils.dart';
-import 'package:ramadan_tracker/modules/dashboard/widgets/leaderboard_widget.dart';
-import 'package:ramadan_tracker/modules/dashboard/widgets/quote_widget.dart';
-import 'package:ramadan_tracker/modules/dashboard/widgets/ramadan_days_list.dart';
+import 'package:amal_tracker/app/common/storage/storage_controller.dart';
+import 'package:amal_tracker/app/common/utils/ramadan_utils.dart';
+import 'package:amal_tracker/modules/dashboard/widgets/leaderboard_widget.dart';
+import 'package:amal_tracker/modules/dashboard/widgets/quote_widget.dart';
+import 'package:amal_tracker/modules/dashboard/widgets/ramadan_days_list.dart';
 
 import '../../../app/constants/app_color.dart';
 import '../../../app/routes/app_pages.dart';

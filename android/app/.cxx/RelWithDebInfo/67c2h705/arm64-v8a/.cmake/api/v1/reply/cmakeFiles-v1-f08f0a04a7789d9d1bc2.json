@@ -37,7 +37,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/ramadan_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeSystem.cmake"
+			"path" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/amal_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeSystem.cmake"
 		},
 		{
 			"isExternal" : true,
@@ -303,7 +303,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/ramadan_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCCompiler.cmake"
+			"path" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/amal_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -537,7 +537,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/ramadan_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake"
+			"path" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/amal_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -688,7 +688,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/ramadan_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCCompiler.cmake"
+			"path" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/amal_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -782,13 +782,13 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/ramadan_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake"
+			"path" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/amal_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/ramadan_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a",
+		"build" : "C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/Ramadan Tracker/amal_tracker/android/app/.cxx/RelWithDebInfo/67c2h705/arm64-v8a",
 		"source" : "C:/Users/rahat/.shorebird/bin/cache/flutter/2e1bcd18e2dc3b8251dc0671085c6518d37e16ad/packages/flutter_tools/gradle/src/main/groovy"
 	},
 	"version" : 

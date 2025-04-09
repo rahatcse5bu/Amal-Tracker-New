@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
-import 'package:ramadan_tracker/app/common/storage/storage_controller.dart';
+import 'package:amal_tracker/app/common/storage/storage_controller.dart';
 
 import '../../../Data/data.dart';
 import '../../../app/constants/app_color.dart';

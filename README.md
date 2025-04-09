@@ -1,4 +1,4 @@
-# ramadan_tracker
+# amal_tracker
 
 A new Flutter project.
 

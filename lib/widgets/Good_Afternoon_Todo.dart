@@ -5,8 +5,8 @@
 // import 'package:flutter/material.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:localstorage/localstorage.dart';
-// import 'package:ramadan_tracker/colors.dart';
-// import 'package:ramadan_tracker/Data/data.dart';
+// import 'package:amal_tracker/colors.dart';
+// import 'package:amal_tracker/Data/data.dart';
 
 // import '../Data/localStorageFunc.dart';
 
@@ -19,7 +19,7 @@
 
 // class _Good_Afternoon_TodoState extends State<Good_Afternoon_Todo> {
 //   bool? val = false;
-//   final LocalStorage storage = new LocalStorage('ramadan_tracker');
+//   final LocalStorage storage = new LocalStorage('amal_tracker');
 
 //   TextEditingController quran_ayat_hifz_controller =
 //       new TextEditingController();
@@ -157,7 +157,7 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ramadan_tracker/colors.dart';
+import 'package:amal_tracker/colors.dart';
 import '../Data/data.dart';
 import '../app/common/controller/good_afternoon_controller.dart';
 

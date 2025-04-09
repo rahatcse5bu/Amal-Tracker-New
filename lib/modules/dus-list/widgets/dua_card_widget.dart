@@ -2,7 +2,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ramadan_tracker/modules/dus-list/models/dua_model.dart';
+import 'package:amal_tracker/modules/dus-list/models/dua_model.dart';
 import '../../../app/constants/app_color.dart';
 import 'package:get/get.dart';
 import '../../../app/translation/language_controller.dart';

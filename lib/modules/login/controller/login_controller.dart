@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:ramadan_tracker/app/common/storage/storage_controller.dart';
+import 'package:amal_tracker/app/common/storage/storage_controller.dart';
 
 import '../../../app/apis/api_helper.dart';
 import '../../../app/routes/app_pages.dart';

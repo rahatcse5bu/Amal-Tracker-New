@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:ramadan_tracker/login.dart';
-import 'package:ramadan_tracker/register.dart';
+import 'package:amal_tracker/login.dart';
+import 'package:amal_tracker/register.dart';
 import 'Credit.dart';
 import 'Data/data.dart';
 import 'PlannerController.dart';
@@ -96,7 +96,7 @@ class _DashboardState extends State<Dashboard> {
   int _visibleItemCount = 25;
   bool _showAll = false;
 
-  LocalStorage storage = LocalStorage('ramadan_tracker');
+  LocalStorage storage = LocalStorage('amal_tracker');
   late String userName;
   final PlannerController plannerController = Get.put(PlannerController());
   //end debug

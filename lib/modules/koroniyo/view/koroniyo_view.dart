@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:ramadan_tracker/app/common/widgets/custom_appbar_widget.dart';
+import 'package:amal_tracker/app/common/widgets/custom_appbar_widget.dart';
 import '../../../app/constants/app_color.dart';
 import '../../../app/translation/translation_keys.dart';
 import '../controller/koroniyo_controller.dart';

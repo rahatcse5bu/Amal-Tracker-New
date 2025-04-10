@@ -1,0 +1,2 @@
+C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/amal_tracker/android/app/.cxx/Debug/o6s5l830/x86/CMakeFiles/edit_cache.dir
+C:/Users/rahat/OneDrive/Desktop/PNC_Soft_Tech/amal_tracker/android/app/.cxx/Debug/o6s5l830/x86/CMakeFiles/rebuild_cache.dir

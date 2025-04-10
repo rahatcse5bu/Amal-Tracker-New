@@ -1,6 +1,6 @@
 class AppConfig {
   // Define your server URLs
-  static const String baseUrl = 'https://ramadan-tracker-server.vercel.app/api/';
+  static const String baseUrl = 'https://amol-tracker-back-end.vercel.app/api/';
   
   // Define app version
   static const String appVersion = '1.0.0';

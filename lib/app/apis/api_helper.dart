@@ -36,7 +36,8 @@ Future<Either<CustomError, List<AjkerHadithModel>>> fetchAjkerHadith();
   Future<Either<CustomError, String>> addPoints(
       String userId, int ramadanDay, int points);
   // Future<Either<CustomError, List<dynamic>>> fetchTrackingOptions(String slug);
-Future<Either<CustomError, List<TrackingOption>>> fetchTrackingOptions(String slug);
+Future<Either<CustomError, List<TrackingOption>>> fetchTrackingOptions(String slug) ;
+
   Future<Either<CustomError, List<UserModel>>> fetchUsers();
   Future<Either<CustomError, int>> fetchTodaysPoint(
       String userId, int ramadanDay);

@@ -17,6 +17,7 @@ import 'package:expandable_text/expandable_text.dart';
 
 import '../controller/tracking_controller.dart';
 import '../widgets/achievement_card_widget.dart';
+import '../widgets/amal_tracking_widget.dart';
 import '../widgets/asmaul_husna_widget.dart';
 import '../widgets/quick_jump_section_widget.dart';
 import '../widgets/tracking_widget.dart';
@@ -255,10 +256,18 @@ class RamadanPlannerView extends GetView<RamadanPlannerController> {
                           type: 'switch',
                           slug: 'night_tracking'),
                     ),
+                    // Container(
+                    //   key: _quickjumpController.sectionKeys['fajr']
+                    //       ?['key'], // Assign Global Key,
+                    //   child: TrackingWidget(
+                    //       ramadan_day: ramadanDay,
+                    //       type: 'checkbox',
+                    //       slug: 'fajr_tracking'),
+                    // ),
                     Container(
                       key: _quickjumpController.sectionKeys['fajr']
                           ?['key'], // Assign Global Key,
-                      child: TrackingWidget(
+                      child: AmalTracker(
                           ramadan_day: ramadanDay,
                           type: 'checkbox',
                           slug: 'fajr_tracking'),

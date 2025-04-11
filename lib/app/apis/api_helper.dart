@@ -9,6 +9,7 @@ import '../../modules/login/models/login_request_model.dart'
     show LoginRequestModel;
 import '../../modules/login/models/login_response_model.dart';
 import '../../modules/ramadan_planner/models/ayat_model.dart';
+import '../../modules/ramadan_planner/models/tracking_options_model.dart';
 import '../../modules/register/models/register_model.dart';
 import '../common/models/ayat_model.dart';
 import '../common/models/hadith_model.dart';
@@ -34,7 +35,8 @@ Future<Either<CustomError, List<AjkerHadithModel>>> fetchAjkerHadith();
       String slug, String optionId, String userId, int ramadanDay);
   Future<Either<CustomError, String>> addPoints(
       String userId, int ramadanDay, int points);
-  Future<Either<CustomError, List<dynamic>>> fetchTrackingOptions(String slug);
+  // Future<Either<CustomError, List<dynamic>>> fetchTrackingOptions(String slug);
+Future<Either<CustomError, List<TrackingOption>>> fetchTrackingOptions(String slug);
   Future<Either<CustomError, List<UserModel>>> fetchUsers();
   Future<Either<CustomError, int>> fetchTodaysPoint(
       String userId, int ramadanDay);

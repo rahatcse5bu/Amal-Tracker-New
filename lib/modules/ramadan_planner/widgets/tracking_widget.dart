@@ -88,13 +88,13 @@ class TrackingWidget extends StatelessWidget {
                         // ✅ Mapping over tracking options
                         ...controller.trackingOptions.map<Widget>((option) {
                           final checked =
-                              controller.checkedStates[option['_id']] ?? false;
+                              controller.checkedStates[option.id] ?? false;
 
                           // ✅ Checkbox List
                           if (controller.type == "checkbox") {
                             return CheckboxListTile(
                               secondary:
-                                  controller.loadingStates[option['_id']] ==
+                                  controller.loadingStates[option.id] ==
                                           true
                                       ? const CupertinoActivityIndicator(
                                           color: AppColors.primary,
@@ -109,9 +109,9 @@ class TrackingWidget extends StatelessWidget {
                                   checked ? AppColors.primary : Colors.red,
                               controlAffinity: ListTileControlAffinity.leading,
                               title: Text(
-                                  "${option['title']} [${option['point']} Points]"),
+                                  "${option.title} [${option.point} Points]"),
                               subtitle: ExpandableText(
-                                option['description'],
+                                option.description,
                                 expandText: 'show more',
                                 collapseText: 'show less',
                                 maxLines: 2,
@@ -123,10 +123,10 @@ class TrackingWidget extends StatelessWidget {
                               onChanged: (bool? newValue) {
                                 if (newValue != null) {
                                   controller.updateTrackingOption(
-                                      option['_id'], newValue);
+                                      option.id, newValue);
                                   controller.submitPoints(newValue
-                                      ? option['point']
-                                      : -option['point']);
+                                      ? option.point
+                                      : -option.point);
                                 }
                               },
                             );
@@ -136,7 +136,7 @@ class TrackingWidget extends StatelessWidget {
                           if (controller.type == "switch") {
                             return SwitchListTile(
                               secondary:
-                                  controller.loadingStates[option['_id']] ==
+                                  controller.loadingStates[option.id] ==
                                           true
                                       ? const CupertinoActivityIndicator(
                                           color: AppColors.primary,
@@ -150,9 +150,9 @@ class TrackingWidget extends StatelessWidget {
                               activeColor:
                                   checked ? AppColors.primary : Colors.red,
                               title: Text(
-                                  "${option['title']} [${option['point']} Points]"),
+                                  "${option.title} [${option.point} Points]"),
                               subtitle: ExpandableText(
-                                option['description'],
+                                option.description,
                                 expandText: 'show more',
                                 collapseText: 'show less',
                                 maxLines: 2,
@@ -163,10 +163,10 @@ class TrackingWidget extends StatelessWidget {
                               value: checked,
                               onChanged: (bool newValue) {
                                 controller.updateTrackingOption(
-                                    option['_id'], newValue);
+                                    option.id, newValue);
                                 controller.submitPoints(newValue
-                                    ? option['point']
-                                    : -option['point']);
+                                    ? option.point
+                                    : -option.point);
                               },
                             );
                           }

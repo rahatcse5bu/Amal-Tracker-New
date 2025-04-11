@@ -11,6 +11,7 @@ import '../../modules/koroniyo/models/koroniyo_model.dart';
 import '../../modules/login/models/login_request_model.dart';
 import '../../modules/login/models/login_response_model.dart';
 import '../../modules/ramadan_planner/models/ayat_model.dart';
+import '../../modules/ramadan_planner/models/tracking_options_model.dart';
 import '../../modules/register/models/register_model.dart';
 import '../common/models/ayat_model.dart';
 import '../common/models/hadith_model.dart';
@@ -216,27 +217,49 @@ Future<Either<CustomError, List<SalafQuoteModel>>> fetchSalafQuotes() async {
   //         message: response.statusText ?? 'Failed to load tracking options'));
   //   }
   // }
+// @override
+// Future<Either<CustomError, List<dynamic>>> fetchTrackingOptions(String slug) async {
+//   final response = await get('trackings/slug/$slug');
+
+//   if (response.statusCode == 200 &&
+//       response.body['success'] == true &&
+//       response.body['data'].isNotEmpty) {
+//     try {
+//       List<dynamic> options = response.body['data'][0]['options'];
+
+//       // Sort by index
+//       options.sort((a, b) => a["index"].compareTo(b["index"]));
+
+//       // Extract users for each option
+//       options = options.map((option) {
+//         return {
+//           ...option,
+//           'users': option['users'] ?? [], // Ensure users list exists
+//         };
+//       }).toList();
+
+//       return Right(options);
+//     } catch (e) {
+//       return Left(CustomError(500, message: 'Data parsing error: ${e.toString()}'));
+//     }
+//   } else {
+//     return Left(CustomError(
+//       response.statusCode ?? 500,
+//       message: response.statusText ?? 'Failed to load tracking options',
+//     ));
+//   }
+// }
 @override
-Future<Either<CustomError, List<dynamic>>> fetchTrackingOptions(String slug) async {
+Future<Either<CustomError, List<TrackingOption>>> fetchTrackingOptions(String slug) async {
   final response = await get('trackings/slug/$slug');
 
   if (response.statusCode == 200 &&
       response.body['success'] == true &&
       response.body['data'].isNotEmpty) {
     try {
-      List<dynamic> options = response.body['data'][0]['options'];
-
-      // Sort by index
-      options.sort((a, b) => a["index"].compareTo(b["index"]));
-
-      // Extract users for each option
-      options = options.map((option) {
-        return {
-          ...option,
-          'users': option['users'] ?? [], // Ensure users list exists
-        };
-      }).toList();
-
+      List<dynamic> rawOptions = response.body['data'][0]['options'];
+      rawOptions.sort((a, b) => a["index"].compareTo(b["index"]));
+      final options = rawOptions.map((e) => TrackingOption.fromJson(e)).toList();
       return Right(options);
     } catch (e) {
       return Left(CustomError(500, message: 'Data parsing error: ${e.toString()}'));

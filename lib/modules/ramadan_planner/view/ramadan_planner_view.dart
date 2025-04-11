@@ -27,7 +27,43 @@ class RamadanPlannerView extends GetView<RamadanPlannerController> {
   final NavController navController = Get.put(NavController());
   final MainController mainController = Get.put(MainController());
 
-  
+  Widget _buildTrackingSection(int ramadanDay) {
+    return TabBarView(
+      children: [
+        AmalTracker(
+          ramadan_day: ramadanDay,
+          slug: 'fajr_tracking',
+          type: 'checkbox',
+        ),
+        AmalTracker(
+          ramadan_day: ramadanDay,
+          slug: 'zuhr_tracking',
+          type: 'checkbox',
+        ),
+        AmalTracker(
+          ramadan_day: ramadanDay,
+          slug: 'asr_tracking',
+          type: 'checkbox',
+        ),
+        AmalTracker(
+          ramadan_day: ramadanDay,
+          slug: 'evening_tracking',
+          type: 'checkbox',
+        ),
+        AmalTracker(
+          ramadan_day: ramadanDay,
+          slug: 'night_tracking',
+          type: 'checkbox',
+        ),
+        AmalTracker(
+          ramadan_day: ramadanDay,
+          slug: 'qadr_tracking',
+          type: 'checkbox',
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     int ramadanDay = Get.arguments['ramadan_day'] ?? 1;
@@ -243,27 +279,19 @@ class RamadanPlannerView extends GetView<RamadanPlannerController> {
                         key: _quickjumpController.sectionKeys['qadr']
                             ?['key'], // Assign the GlobalKey
 
-                        child: TrackingWidget(
+                        child: AmalTracker(
                             ramadan_day: ramadanDay,
-                            type: 'switch',
+                            type: 'checkbox',
                             slug: 'qadr_tracking'),
                       ),
                     Container(
                       key: _quickjumpController.sectionKeys['night']
                           ?['key'], // Assign Global Key,
-                      child: TrackingWidget(
+                      child: AmalTracker(
                           ramadan_day: ramadanDay,
-                          type: 'switch',
+                          type: 'checkbox',
                           slug: 'night_tracking'),
                     ),
-                    // Container(
-                    //   key: _quickjumpController.sectionKeys['fajr']
-                    //       ?['key'], // Assign Global Key,
-                    //   child: TrackingWidget(
-                    //       ramadan_day: ramadanDay,
-                    //       type: 'checkbox',
-                    //       slug: 'fajr_tracking'),
-                    // ),
                     Container(
                       key: _quickjumpController.sectionKeys['fajr']
                           ?['key'], // Assign Global Key,
@@ -276,9 +304,9 @@ class RamadanPlannerView extends GetView<RamadanPlannerController> {
                       key: _quickjumpController.sectionKeys['zuhr']
                           ?['key'], // Assign Global Key,
 
-                      child: TrackingWidget(
+                      child: AmalTracker(
                           ramadan_day: ramadanDay,
-                          type: 'switch',
+                          type: 'checkbox',
                           slug: 'zuhr_tracking'),
                     ),
                     // Dua Card
@@ -367,20 +395,11 @@ class RamadanPlannerView extends GetView<RamadanPlannerController> {
                       key: _quickjumpController.sectionKeys['common']
                           ?['key'], // Assign Global Key,
 
-                      child: TrackingWidget(
+                      child: AmalTracker(
                           ramadan_day: ramadanDay,
-                          type: 'switch',
+                          type: 'checkbox',
                           slug: 'general_tracking'),
                     ),
-                  // ramadanDay>20?  Container(
-                  //     key: _quickjumpController.sectionKeys['qadr']
-                  //         ?['key'], // Assign Global Key,
-
-                  //     child: TrackingWidget(
-                  //         ramadan_day: ramadanDay,
-                  //         type: 'switch',
-                  //         slug: 'qadr_tracking'),
-                  //   ):Container(),
                     Container(
                         key: _quickjumpController.sectionKeys['other']
                             ?['key'], // Assign Global Key,
@@ -390,16 +409,16 @@ class RamadanPlannerView extends GetView<RamadanPlannerController> {
                       key: _quickjumpController.sectionKeys['asr']
                           ?['key'], // Assign Global Key,
 
-                      child: TrackingWidget(
+                      child: AmalTracker(
                           ramadan_day: ramadanDay,
-                          type: 'switch',
+                          type: 'checkbox',
                           slug: 'asr_tracking'),
                     ),
                     Container(
                       key: _quickjumpController.sectionKeys['maghrib']
                           ?['key'], // Assign Global Key,
 
-                      child: TrackingWidget(
+                      child: AmalTracker(
                           ramadan_day: ramadanDay,
                           type: 'checkbox',
                           slug: 'evening_tracking'),
@@ -446,43 +465,6 @@ class RamadanPlannerView extends GetView<RamadanPlannerController> {
               : SizedBox.shrink()), // Hide when not needed
         ],
       ),
-      //     bottomNavigationBar: Obx(
-      //   () => BottomNavigationBar(
-      //     // iconSize: 16.sp,
-      //     // unselectedLabelStyle: TextStyle(fontSize: 11.sp),
-      //     backgroundColor: Colors.white,
-      //     currentIndex: navController.currentIndex.value,
-      //     showSelectedLabels: true,
-      //     // onTap: controller.changeTab,
-      //     onTap: (index) {
-      //       if (index == 1) {
-      //         mainController.openMoreBottomSheet();
-      //       } 
-      //       else if (index == 2) {
-      //         mainController.openMoreBottomSheet();
-      //       } 
-      //       else {
-      //         navController.changeTab(index);
-      //       }
-      //     },
-      //     items: [
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.home),
-      //         label: TranslationKeys.home.tr,
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.leaderboard),
-      //         label: TranslationKeys.leaderBoard.tr,
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.more_horiz),
-      //         label: TranslationKeys.more.tr,
-      //       ),
-      //     ],
-      //     selectedItemColor: AppColors.primary,
-      //     unselectedItemColor: Colors.grey,
-      //   ),
-      // ),
     );
   }
 }

@@ -93,33 +93,6 @@ class AmalTracker extends StatelessWidget {
                   
                   const SizedBox(height: 16),
 
-                  // Laylatul Qadr message for last 10 days
-                  if (ramadan_day > 20 && slug == 'qadr_tracking')
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: ramadan_day % 2 == 0 
-                            ? Colors.amber.withOpacity(0.2)
-                            : Colors.green.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: ramadan_day % 2 == 0 ? Colors.amber : Colors.green,
-                          width: 1,
-                        ),
-                      ),
-                      child: Text(
-                        ramadan_day % 2 == 0
-                            ? "আজ ${ramadan_day}${Utils.getNumberSuffix(ramadan_day)} রমাদ্বন। আজ শেষ দশকের একটি (জোড়) রাত। আজ রাতেও 'আমাল করুন।জোড় রাতেও লাইলাতুল ক্বদর হতে পারে।"
-                            : "আজ ${ramadan_day}${Utils.getNumberSuffix(ramadan_day)} রমাদ্বন। আজ শেষ দশকের বিজোড় রাত।  বিজোড় রাতে বেশি বেশি 'আমাল করুন।সারারাত ধরে 'আমাল করুন।  বিজোড় রাতগুলিতে লাইলাতুল ক্বদর হওয়ার সম্ভাবনা প্রবল।",
-                        style: TextStyle(
-                          color: ramadan_day % 2 == 0 ? Colors.amber.shade800 : Colors.green.shade800,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-
-                  const SizedBox(height: 16),
-
                   // Progress Summary and stats
                   _buildProgressSummary(controller),
 
@@ -165,8 +138,7 @@ class AmalTracker extends StatelessWidget {
           ),
         ],
       );
-      });
-    }
+    });
   }
 
   Widget _buildProgressSummary(TrackingController controller) {
@@ -272,12 +244,35 @@ class AmalTracker extends StatelessWidget {
                 backgroundColor: Colors.grey.shade200,
                 valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                 minHeight: 8,
-                borderRadius: BorderRadius.circular(4),
               ),
             ],
           ),
         ],
       )
+    );
+  }
+
+  Widget _buildStatusIndicators(BuildContext context, TrackingController controller) {
+    // Organize by tracking type instead of prayer vs other
+    final sortedOptions = controller.trackingOptions.toList()
+      ..sort((a, b) {
+        if (a.isSalatTracking == b.isSalatTracking) return a.index.compareTo(b.index);
+        return a.isSalatTracking ? -1 : 1;
+      });
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          controller.getTrackingName(),
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 12),
+        ...sortedOptions.map((option) => _buildAmalCard(context, controller, option)),
+      ],
     );
   }
 
@@ -307,27 +302,6 @@ class AmalTracker extends StatelessWidget {
             color: color,
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildStatusIndicators(BuildContext context, TrackingController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Amal Tracking Details",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 12),
-        
-        // Amal options list with individual properties
-        ...controller.trackingOptions.map((option) {
-          return _buildAmalCard(context, controller, option);
-        }).toList(),
       ],
     );
   }
@@ -571,207 +545,12 @@ class AmalTracker extends StatelessWidget {
               ),
             ),
           ),
-
-          // Properties and count section in expansion tile
-          Theme(
-            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-            child: ExpansionTile(
-              tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-              title: Row(
-                children: [
-                  Icon(
-                    Icons.settings,
-                    size: 16,
-                    color: AppColors.primary.withOpacity(0.8),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    "Properties & Count",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.primary.withOpacity(0.8),
-                    ),
-                  ),
-                ],
-              ),
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade50,
-                    borderRadius: const BorderRadius.vertical(
-                      bottom: Radius.circular(16),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Property toggles
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          _buildPropertyChip(
-                            "In Mosque",
-                            option.isInMosque,
-                            Icons.mosque,
-                            (value) => controller.toggleOptionProperty(option.id, 'isInMosque', value),
-                          ),
-                          _buildPropertyChip(
-                            "In Jamayat",
-                            option.isInJamayat,
-                            Icons.groups,
-                            (value) => controller.toggleOptionProperty(option.id, 'isInJamayat', value),
-                          ),
-                          _buildPropertyChip(
-                            "Qadha",
-                            option.isQadha,
-                            Icons.update,
-                            (value) => controller.toggleOptionProperty(option.id, 'isQadha', value),
-                            isNegative: true,
-                          ),
-                          _buildPropertyChip(
-                            "Regular",
-                            option.isRegularOrder,
-                            Icons.format_list_numbered,
-                            (value) => controller.toggleOptionProperty(option.id, 'isRegularOrder', value),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      const Divider(),
-                      // Khushu Level Rating
-                      _buildKhushuRating(
-                        controller,
-                        option.id,
-                        controller.optionKhushuLevel[option.id] ?? 0,
-                      ),
-                      const Divider(),
-                      // Count controls
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove_circle_outline),
-                            color: AppColors.primary,
-                            onPressed: () => controller.decrementOptionCount(option.id),
-                          ),
-                          Expanded(
-                            child: SliderTheme(
-                              data: SliderThemeData(
-                                activeTrackColor: AppColors.primary,
-                                inactiveTrackColor: AppColors.primary.withOpacity(0.2),
-                                thumbColor: AppColors.primary,
-                                overlayColor: AppColors.primary.withOpacity(0.1),
-                              ),
-                              child: Slider(
-                                value: clampedProgress,
-                                min: 0,
-                                max: maxValue.toDouble(),
-                                divisions: maxValue,
-                                label: currentProgress.toString(),
-                                onChanged: (value) => controller.updateOptionCount(option.id, value.toInt()),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.add_circle_outline),
-                            color: AppColors.primary,
-                            onPressed: () => controller.incrementOptionCount(option.id),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildPropertyChip(String label, bool value, IconData icon, Function(bool) onTap, {bool isNegative = false}) {
-    final color = isNegative ? Colors.red : AppColors.primary;
-    
-    return InkWell(
-      onTap: () => onTap(!value),
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: value ? color.withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: value ? color : Colors.grey.shade300,
-            width: 1,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 16,
-              color: value ? color : Colors.grey.shade500,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: value ? FontWeight.w600 : FontWeight.normal,
-                color: value ? color : Colors.grey.shade500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildKhushuRating(TrackingController controller, String optionId, int currentLevel) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Khushu Level",
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: AppColors.primary.withOpacity(0.8),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(5, (index) {
-            final level = index + 1;
-            return InkWell(
-              onTap: () => controller.updateKhushuLevel(optionId, level),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: level <= currentLevel
-                      ? AppColors.primary
-                      : AppColors.primary.withOpacity(0.1),
-                ),
-                child: Text(
-                  "$level",
-                  style: TextStyle(
-                    color: level <= currentLevel ? Colors.white : AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            );
-          }),
-        ),
-      ],
-    );
-  }
 
 
 

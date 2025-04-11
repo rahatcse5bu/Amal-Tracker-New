@@ -12,6 +12,10 @@ class TrackingOption {
   final bool isRegularOrder;
   final bool isInJamayat;
   final int khushuLevel; // Add this for 1-5 rating
+  final bool isCountable;
+  final bool isSalatTracking;
+  final bool isHayez;
+  final bool isQasr;
   final List<UserEntry> users;
 
   TrackingOption({
@@ -28,6 +32,10 @@ class TrackingOption {
     required this.isRegularOrder,
     required this.isInJamayat,
     this.khushuLevel = 2,
+    this.isCountable = false,
+    this.isSalatTracking = false,
+    this.isHayez = false,
+    this.isQasr = false,
     required this.users,
   });
 
@@ -46,6 +54,10 @@ class TrackingOption {
       isRegularOrder: json['isRegularOrder'] ?? false,
       isInJamayat: json['isInJamayat'] ?? false,
       khushuLevel: json['khushuLevel'] ?? 0,
+      isCountable: json['isCountable'] ?? false,
+      isSalatTracking: json['isSalatTracking'] ?? false,
+      isHayez: json['isHayez'] ?? false,
+      isQasr: json['isQasr'] ?? false,
       users: (json['users'] as List<dynamic>? ?? [])
           .map((userJson) => UserEntry.fromJson(userJson))
           .toList(),

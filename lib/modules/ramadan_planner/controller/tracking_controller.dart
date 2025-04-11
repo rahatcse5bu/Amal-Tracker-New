@@ -36,6 +36,8 @@ class TrackingController extends GetxController {
   final Map<String, bool> optionInJamayat = {};
   final Map<String, int> optionKhushuLevel = {};
   final Map<String, int> currentProgress = {};
+  final Map<String, bool> optionHayez = {};
+  final Map<String, bool> optionQasr = {};
 
   @override
   void onInit() {
@@ -60,6 +62,12 @@ class TrackingController extends GetxController {
         break;
       case 'isInJamayat':
         optionInJamayat[optionId] = value;
+        break;
+      case 'isHayez':
+        optionHayez[optionId] = value;
+        break;
+      case 'isQasr':
+        optionQasr[optionId] = value;
         break;
     }
     updateTrackingOption(optionId, true); // Update on server
@@ -118,6 +126,8 @@ class TrackingController extends GetxController {
         optionRegularOrder.clear();
         optionInJamayat.clear();
         optionKhushuLevel.clear();
+        optionHayez.clear();
+        optionQasr.clear();
 
         for (var option in options) {
           final userMatched = option.users.firstWhereOrNull(
@@ -135,6 +145,8 @@ class TrackingController extends GetxController {
             optionRegularOrder[option.id] = option.isRegularOrder;
             optionInJamayat[option.id] = option.isInJamayat;
             optionKhushuLevel[option.id] = option.khushuLevel;
+            optionHayez[option.id] = option.isHayez;
+            optionQasr[option.id] = option.isQasr;
           }
 
           currentProgress[option.id] = option.totalCount;
@@ -237,9 +249,12 @@ class TrackingController extends GetxController {
 
   int getAverageCompletionTime() {
     if (trackingOptions.isEmpty) return 0;
+    
+    final completedOptions = trackingOptions.where((option) => checkedStates[option.id] == true).length;
+    if (completedOptions == 0) return 0;
+    
     return trackingOptions.fold(0, (sum, option) => 
-      sum + (checkedStates[option.id] == true ? 10 : 0)) ~/ 
-      trackingOptions.where((option) => checkedStates[option.id] == true).length;
+      sum + (checkedStates[option.id] == true ? 10 : 0)) ~/ completedOptions;
   }
 
   bool isMilestoneCompleted(String optionId) {

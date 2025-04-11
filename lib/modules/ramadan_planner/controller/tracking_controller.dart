@@ -29,11 +29,12 @@ class TrackingController extends GetxController {
   final ConfettiController confettiController =
       ConfettiController(duration: const Duration(milliseconds: 5));
   var userId = ''.obs;  // Store current userId
-  final RxBool isInMosque = false.obs;
-  final RxBool isKhushuKhuzu = false.obs;
-  final RxBool isQadha = false.obs;
-  final RxBool isRegularOrder = false.obs;
-  final RxInt totalCount = 0.obs;
+  final Map<String, bool> optionInMosque = {};
+  final Map<String, bool> optionKhushuKhuzu = {};
+  final Map<String, bool> optionQadha = {};
+  final Map<String, bool> optionRegularOrder = {};
+  final Map<String, bool> optionInJamayat = {};
+  final Map<String, int> optionKhushuLevel = {};
   final Map<String, int> currentProgress = {};
 
   @override
@@ -43,28 +44,57 @@ class TrackingController extends GetxController {
     loadTrackingOptions();
   }
 
-  void toggleMosqueStatus() {
-    isInMosque.value = !isInMosque.value;
+  void toggleOptionProperty(String optionId, String property, bool value) {
+    switch (property) {
+      case 'isInMosque':
+        optionInMosque[optionId] = value;
+        break;
+      case 'isKhushuKhuzu':
+        optionKhushuKhuzu[optionId] = value;
+        break;
+      case 'isQadha':
+        optionQadha[optionId] = value;
+        break;
+      case 'isRegularOrder':
+        optionRegularOrder[optionId] = value;
+        break;
+      case 'isInJamayat':
+        optionInJamayat[optionId] = value;
+        break;
+    }
+    updateTrackingOption(optionId, true); // Update on server
   }
 
-  void toggleKhushuStatus() {
-    isKhushuKhuzu.value = !isKhushuKhuzu.value;
+  void updateKhushuLevel(String optionId, int level) {
+    optionKhushuLevel[optionId] = level.clamp(1, 5);
+    updateTrackingOption(optionId, true);
   }
 
-  void toggleQadhaStatus() {
-    isQadha.value = !isQadha.value;
+  void incrementOptionCount(String optionId) {
+    final option = trackingOptions.firstWhereOrNull((o) => o.id == optionId);
+    if (option == null) return;
+    
+    final maxCount = option.milestone > 0 ? option.milestone : 100;
+    currentProgress[optionId] = ((currentProgress[optionId] ?? 0) + 1).clamp(0, maxCount);
+    update();
   }
 
-  void toggleRegularOrderStatus() {
-    isRegularOrder.value = !isRegularOrder.value;
+  void decrementOptionCount(String optionId) {
+    final option = trackingOptions.firstWhereOrNull((o) => o.id == optionId);
+    if (option == null) return;
+    
+    final maxCount = option.milestone > 0 ? option.milestone : 100;
+    currentProgress[optionId] = ((currentProgress[optionId] ?? 0) - 1).clamp(0, maxCount);
+    update();
   }
 
-  void updateTotalCount(int newCount) {
-    totalCount.value = newCount;
-  }
-
-  int getCurrentProgress(String optionId) {
-    return currentProgress[optionId] ?? 0;
+  void updateOptionCount(String optionId, int value) {
+    final option = trackingOptions.firstWhereOrNull((o) => o.id == optionId);
+    if (option == null) return;
+    
+    final maxCount = option.milestone > 0 ? option.milestone : 100;
+    currentProgress[optionId] = value.clamp(0, maxCount);
+    update();
   }
 
   Future<void> loadUserId() async {
@@ -82,11 +112,12 @@ class TrackingController extends GetxController {
         checkedStates.clear();
         loadingStates.clear();
 
-        isInMosque.value = false;
-        isKhushuKhuzu.value = false;
-        isQadha.value = false;
-        isRegularOrder.value = false;
-        totalCount.value = 0;
+        optionInMosque.clear();
+        optionKhushuKhuzu.clear();
+        optionQadha.clear();
+        optionRegularOrder.clear();
+        optionInJamayat.clear();
+        optionKhushuLevel.clear();
 
         for (var option in options) {
           final userMatched = option.users.firstWhereOrNull(
@@ -98,11 +129,12 @@ class TrackingController extends GetxController {
           loadingStates[option.id] = false;
 
           if (isChecked) {
-            isInMosque.value |= option.isInMosque;
-            isKhushuKhuzu.value |= option.isKhushuKhuzu;
-            isQadha.value |= option.isQadha;
-            isRegularOrder.value |= option.isRegularOrder;
-            totalCount.value += option.totalCount;
+            optionInMosque[option.id] = option.isInMosque;
+            optionKhushuKhuzu[option.id] = option.isKhushuKhuzu;
+            optionQadha[option.id] = option.isQadha;
+            optionRegularOrder[option.id] = option.isRegularOrder;
+            optionInJamayat[option.id] = option.isInJamayat;
+            optionKhushuLevel[option.id] = option.khushuLevel;
           }
 
           currentProgress[option.id] = option.totalCount;
@@ -216,26 +248,12 @@ class TrackingController extends GetxController {
     return (currentProgress[optionId] as int? ?? 0) >= option.milestone;
   }
 
-  void incrementCount() {
-    totalCount.value = (totalCount.value + 1).clamp(0, 100);
-  }
-
-  void decrementCount() {
-    totalCount.value = (totalCount.value - 1).clamp(0, 100);
-  }
-
-  void resetCount() {
-    totalCount.value = 0;
-  }
-
-  int getCurrentCount() => totalCount.value;
-
   int getTotalCount() => trackingOptions.fold(0, (sum, option) => sum + option.totalCount);
 
   int getMaxCount() => 100;
 
-  void updateCurrentCount(int value) {
-    totalCount.value = value;
+  int getCurrentProgress(String optionId) {
+    return currentProgress[optionId] ?? 0;
   }
 
   @override

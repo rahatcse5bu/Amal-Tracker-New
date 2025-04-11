@@ -10,6 +10,8 @@ class TrackingOption {
   final bool isKhushuKhuzu;
   final bool isQadha;
   final bool isRegularOrder;
+  final bool isInJamayat;
+  final int khushuLevel; // Add this for 1-5 rating
   final List<UserEntry> users;
 
   TrackingOption({
@@ -24,6 +26,8 @@ class TrackingOption {
     required this.isKhushuKhuzu,
     required this.isQadha,
     required this.isRegularOrder,
+    required this.isInJamayat,
+    this.khushuLevel = 2,
     required this.users,
   });
 
@@ -40,6 +44,8 @@ class TrackingOption {
       isKhushuKhuzu: json['isKhushuKhuzu'] ?? false,
       isQadha: json['isQadha'] ?? false,
       isRegularOrder: json['isRegularOrder'] ?? false,
+      isInJamayat: json['isInJamayat'] ?? false,
+      khushuLevel: json['khushuLevel'] ?? 0,
       users: (json['users'] as List<dynamic>? ?? [])
           .map((userJson) => UserEntry.fromJson(userJson))
           .toList(),

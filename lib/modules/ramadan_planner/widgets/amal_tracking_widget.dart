@@ -126,24 +126,7 @@ class AmalTracker extends StatelessWidget {
                   const SizedBox(height: 20),
                   
                   // Status indicators and attributes
-                  _buildStatusIndicators(controller),
-                  
-                  const SizedBox(height: 20),
-                  
-                  const Text(
-                    "Amal Tracking Details",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  // Amal options list
-                  ...controller.trackingOptions.map((option) {
-                    return _buildAmalCard(context, controller, option);
-                  }).toList(),
+                  _buildStatusIndicators(context, controller),
                 ],
               ),
             ),
@@ -328,241 +311,24 @@ class AmalTracker extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusIndicators(TrackingController controller) {
-    // Set of common attributes that can be tracked across options
+  Widget _buildStatusIndicators(BuildContext context, TrackingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Tracking Properties",
+          "Amal Tracking Details",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 12),
         
-        // Property widgets in a grid layout for better space usage
-        GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 3.0,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            _buildPropertyToggle(
-              "In Mosque", 
-              controller.isInMosque.value,
-              Icons.mosque,
-              (value) => controller.toggleMosqueStatus(),
-            ),
-            _buildPropertyToggle(
-              "Khushu & Khuzu", 
-              controller.isKhushuKhuzu.value,
-              Icons.volunteer_activism,
-              (value) => controller.toggleKhushuStatus(),
-            ),
-            _buildPropertyToggle(
-              "Qadha",
-              controller.isQadha.value,
-              Icons.update,
-              (value) => controller.toggleQadhaStatus(),
-              isNegative: true,
-            ),
-            _buildPropertyToggle(
-              "Regular Order",
-              controller.isRegularOrder.value,
-              Icons.format_list_numbered,
-              (value) => controller.toggleRegularOrderStatus(),
-            ),
-          ],
-        ),
-        
-        const SizedBox(height: 16),
-        
-        // Count Management Section
-        const Text(
-          "Count Management",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 12),
-        
-        _buildCountManager(controller),
+        // Amal options list with individual properties
+        ...controller.trackingOptions.map((option) {
+          return _buildAmalCard(context, controller, option);
+        }).toList(),
       ],
-    );
-  }
-  
-  Widget _buildPropertyToggle(
-      String label, bool value, IconData icon, Function(bool) onChanged, {bool isNegative = false}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: value 
-            ? (isNegative ? Colors.red.withOpacity(0.1) : AppColors.primary.withOpacity(0.1)) 
-            : Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: value 
-              ? (isNegative ? Colors.red : AppColors.primary) 
-              : Colors.grey.shade300,
-        ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(8),
-          onTap: () => onChanged(!value),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  size: 18,
-                  color: value 
-                      ? (isNegative ? Colors.red : AppColors.primary) 
-                      : Colors.grey,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: value 
-                          ? (isNegative ? Colors.red : AppColors.primary) 
-                          : Colors.grey.shade700,
-                    ),
-                  ),
-                ),
-                Switch(
-                  value: value,
-                  onChanged: onChanged,
-                  activeColor: isNegative ? Colors.red : AppColors.primary,
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  activeTrackColor: isNegative 
-                      ? Colors.red.withOpacity(0.4) 
-                      : AppColors.primary.withOpacity(0.4),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCountManager(TrackingController controller) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Current Count",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "${controller.getCurrentCount()}",
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Total Count",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "${controller.getTotalCount()}",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          
-          const SizedBox(height: 16),
-          
-          // Count controls
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.remove_circle_outline, size: 32),
-                color: AppColors.primary,
-                onPressed: () => controller.decrementCount(),
-              ),
-              Expanded(
-                child: Slider(
-                  value: controller.getCurrentCount().toDouble().clamp(0, 100),
-                  min: 0,
-                  max: 100,
-                  divisions: 100,
-                  activeColor: AppColors.primary,
-                  label: controller.getCurrentCount().toString(),
-                  onChanged: (value) => controller.updateCurrentCount(value.toInt()),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.add_circle_outline, size: 32),
-                color: AppColors.primary,
-                onPressed: () => controller.incrementCount(),
-              ),
-            ],
-          ),
-          
-          const SizedBox(height: 8),
-          
-          // Reset button
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              icon: const Icon(Icons.refresh, size: 16),
-              label: const Text("Reset Count"),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.grey.shade700,
-                side: BorderSide(color: Colors.grey.shade400),
-              ),
-              onPressed: () => controller.resetCount(),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -571,251 +337,442 @@ class AmalTracker extends StatelessWidget {
     final bool isLoading = controller.loadingStates[option.id] ?? false;
     final int currentProgress = controller.getCurrentProgress(option.id);
     final bool isMilestoneCompleted = option.milestone > 0 && currentProgress >= option.milestone;
+    final maxValue = option.milestone > 0 ? option.milestone : 100;
+    final clampedProgress = currentProgress.clamp(0, maxValue).toDouble();
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: checked ? AppColors.primary.withOpacity(0.05) : Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: checked ? AppColors.primary : Colors.grey.shade300,
-          width: 1,
+    // Calculate milestone metrics
+    final int completedMilestones = option.milestone > 0 ? (currentProgress ~/ option.milestone) : 0;
+    final int remainingForNext = option.milestone > 0 
+        ? ((completedMilestones + 1) * option.milestone) - currentProgress 
+        : 0;
+
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: checked ? AppColors.primary.withOpacity(0.5) : Colors.grey.shade200,
+          width: checked ? 2 : 1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: () {
-            final newValue = !checked;
-            controller.updateTrackingOption(option.id, newValue);
-            controller.submitPoints(newValue ? option.point : -option.point);
-          },
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Status icon
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: checked ? AppColors.primary : Colors.grey.shade200,
-                        shape: BoxShape.circle,
+      child: Column(
+        children: [
+          // Main content section
+          InkWell(
+            onTap: () {
+              final newValue = !checked;
+              controller.updateTrackingOption(option.id, newValue);
+              controller.submitPoints(newValue ? option.point : -option.point);
+            },
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Status icon with animation
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: checked 
+                          ? AppColors.primary 
+                          : Colors.grey.shade100,
+                      border: Border.all(
+                        color: checked 
+                            ? AppColors.primary.withOpacity(0.2) 
+                            : Colors.grey.shade300,
+                        width: 2,
                       ),
-                      child: isLoading
-                          ? const CupertinoActivityIndicator(color: Colors.white)
-                          : Icon(
-                              checked ? Icons.check : Icons.hourglass_empty_rounded,
-                              color: Colors.white,
-                              size: 24,
-                            ),
+                      boxShadow: checked ? [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.2),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                        )
+                      ] : [],
                     ),
-                    
-                    const SizedBox(width: 16),
-                    
-                    // Title and description
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            option.title,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: checked ? AppColors.primary : Colors.black87,
-                            ),
+                    child: isLoading
+                        ? const CupertinoActivityIndicator(color: AppColors.primary)
+                        : Icon(
+                            checked ? Icons.check : Icons.circle_outlined,
+                            color: checked ? Colors.white : Colors.grey.shade400,
+                            size: 28,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            option.description,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey.shade700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    
-                    // Points badge
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: checked ? AppColors.primary : Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        "${option.point} pts",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: checked ? Colors.white : Colors.black54,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                
-                const SizedBox(height: 12),
-                
-                // Properties and attributes for this amal
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: [
-                    if (option.isInMosque)
-                      _buildAmalProperty("Mosque", Icons.mosque),
-                    if (option.isKhushuKhuzu)
-                      _buildAmalProperty("Khushu", Icons.volunteer_activism),
-                    if (option.isQadha)
-                      _buildAmalProperty("Qadha", Icons.update, isNegative: true),
-                    if (option.isRegularOrder)
-                      _buildAmalProperty("Regular", Icons.format_list_numbered),
-                  ],
-                ),
-                
-                const SizedBox(height: 12),
-                
-                // Milestone progress indicator
-                if (option.milestone > 0)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.flag,
-                            size: 16,
-                            color: isMilestoneCompleted ? Colors.green : Colors.orange,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            "Milestone: ${option.milestone}",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isMilestoneCompleted ? Colors.green : Colors.orange,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            "Progress: $currentProgress/${option.milestone}",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey.shade700,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(2),
-                        child: LinearProgressIndicator(
-                          value: option.milestone > 0 ? currentProgress / option.milestone : 0,
-                          backgroundColor: Colors.grey.shade200,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            isMilestoneCompleted ? Colors.green : AppColors.primary,
-                          ),
-                          minHeight: 6,
-                        ),
-                      ),
-                      
-                      if (isMilestoneCompleted) 
-                        Padding(
-                          padding: const EdgeInsets.only(top: 6),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.celebration,
-                                size: 14,
-                                color: Colors.green,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                "Milestone Completed! Total completed: ${option.totalCount}",
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.w500,
+                  ),
+                  const SizedBox(width: 16),
+                  
+                  // Content section
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                option.title,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: checked ? AppColors.primary : Colors.black87,
                                 ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: checked 
+                                    ? AppColors.primary 
+                                    : AppColors.primary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    size: 16,
+                                    color: checked ? Colors.white : AppColors.primary,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "${option.point}",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: checked ? Colors.white : AppColors.primary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          option.description,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        if (option.milestone > 0) ...[
+                          const SizedBox(height: 12),
+                          // Progress bar with gradient
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: LinearProgressIndicator(
+                              value: currentProgress / option.milestone,
+                              backgroundColor: Colors.grey.shade200,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                isMilestoneCompleted ? Colors.green : AppColors.primary,
+                              ),
+                              minHeight: 6,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.flag_rounded,
+                                    size: 16,
+                                    color: isMilestoneCompleted ? Colors.green : Colors.orange,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "$currentProgress/${option.milestone}",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                      color: isMilestoneCompleted ? Colors.green : Colors.orange,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.workspace_premium,
+                                    size: 16,
+                                    color: Colors.amber.shade700,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "× $completedMilestones completed",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.amber.shade700,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ),
-                    ],
-                  ),
-                
-                // Total completion times
-                if (option.totalCount > 0)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.repeat,
-                          size: 14,
-                          color: Colors.blue,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          "Completed ${option.totalCount} / ${option.milestone} times",
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: Colors.blue,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                          if (remainingForNext > 0 && !isMilestoneCompleted)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.arrow_circle_up,
+                                    size: 16,
+                                    color: AppColors.primary.withOpacity(0.7),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "$remainingForNext more for next milestone",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.primary.withOpacity(0.7),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          if (isMilestoneCompleted) 
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.celebration,
+                                    size: 16,
+                                    color: Colors.green,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "Current milestone completed!",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green.shade700,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
                       ],
                     ),
                   ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
-  }
 
-  Widget _buildAmalProperty(String label, IconData icon, {bool isNegative = false}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: isNegative ? Colors.red.withOpacity(0.1) : AppColors.primary.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 12,
-            color: isNegative ? Colors.red : AppColors.primary,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
-              color: isNegative ? Colors.red : AppColors.primary,
+          // Properties and count section in expansion tile
+          Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.settings,
+                    size: 16,
+                    color: AppColors.primary.withOpacity(0.8),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Properties & Count",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primary.withOpacity(0.8),
+                    ),
+                  ),
+                ],
+              ),
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade50,
+                    borderRadius: const BorderRadius.vertical(
+                      bottom: Radius.circular(16),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Property toggles
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          _buildPropertyChip(
+                            "In Mosque",
+                            option.isInMosque,
+                            Icons.mosque,
+                            (value) => controller.toggleOptionProperty(option.id, 'isInMosque', value),
+                          ),
+                          _buildPropertyChip(
+                            "In Jamayat",
+                            option.isInJamayat,
+                            Icons.groups,
+                            (value) => controller.toggleOptionProperty(option.id, 'isInJamayat', value),
+                          ),
+                          _buildPropertyChip(
+                            "Qadha",
+                            option.isQadha,
+                            Icons.update,
+                            (value) => controller.toggleOptionProperty(option.id, 'isQadha', value),
+                            isNegative: true,
+                          ),
+                          _buildPropertyChip(
+                            "Regular",
+                            option.isRegularOrder,
+                            Icons.format_list_numbered,
+                            (value) => controller.toggleOptionProperty(option.id, 'isRegularOrder', value),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      const Divider(),
+                      // Khushu Level Rating
+                      _buildKhushuRating(
+                        controller,
+                        option.id,
+                        controller.optionKhushuLevel[option.id] ?? 0,
+                      ),
+                      const Divider(),
+                      // Count controls
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove_circle_outline),
+                            color: AppColors.primary,
+                            onPressed: () => controller.decrementOptionCount(option.id),
+                          ),
+                          Expanded(
+                            child: SliderTheme(
+                              data: SliderThemeData(
+                                activeTrackColor: AppColors.primary,
+                                inactiveTrackColor: AppColors.primary.withOpacity(0.2),
+                                thumbColor: AppColors.primary,
+                                overlayColor: AppColors.primary.withOpacity(0.1),
+                              ),
+                              child: Slider(
+                                value: clampedProgress,
+                                min: 0,
+                                max: maxValue.toDouble(),
+                                divisions: maxValue,
+                                label: currentProgress.toString(),
+                                onChanged: (value) => controller.updateOptionCount(option.id, value.toInt()),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add_circle_outline),
+                            color: AppColors.primary,
+                            onPressed: () => controller.incrementOptionCount(option.id),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildPropertyChip(String label, bool value, IconData icon, Function(bool) onTap, {bool isNegative = false}) {
+    final color = isNegative ? Colors.red : AppColors.primary;
+    
+    return InkWell(
+      onTap: () => onTap(!value),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: value ? color.withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: value ? color : Colors.grey.shade300,
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 16,
+              color: value ? color : Colors.grey.shade500,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: value ? FontWeight.w600 : FontWeight.normal,
+                color: value ? color : Colors.grey.shade500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildKhushuRating(TrackingController controller, String optionId, int currentLevel) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Khushu Level",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: AppColors.primary.withOpacity(0.8),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: List.generate(5, (index) {
+            final level = index + 1;
+            return InkWell(
+              onTap: () => controller.updateKhushuLevel(optionId, level),
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: level <= currentLevel
+                      ? AppColors.primary
+                      : AppColors.primary.withOpacity(0.1),
+                ),
+                child: Text(
+                  "$level",
+                  style: TextStyle(
+                    color: level <= currentLevel ? Colors.white : AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
+
+
+

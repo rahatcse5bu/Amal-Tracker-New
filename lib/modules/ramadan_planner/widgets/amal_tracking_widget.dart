@@ -546,126 +546,155 @@ class AmalTracker extends StatelessWidget {
             ),
           ),
 
-          // Add new sections after the main content when checked
-          if (checked) ...[
-            // Countable options section
-            if (option.isCountable) ...[
-              const Divider(height: 1),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.remove_circle_outline, 
-                        color: AppColors.primary.withOpacity(0.7),
+          // Add prayer-specific options in grid layout when checked
+          if (checked && option.isSalatTracking) ...[
+            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Primary options grid
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    childAspectRatio: 2.5,
+                    children: [
+                      _buildGridItem(
+                        'মসজিদে',
+                        controller.optionInMosque[option.id] ?? false,
+                        (val) => controller.toggleOptionProperty(option.id, 'isInMosque', val),
+                        Icons.mosque,
                       ),
-                      onPressed: () => controller.decrementOptionCount(option.id),
-                    ),
-                    Container(
-                      width: 80,
-                      alignment: Alignment.center,
-                      child: Text(
-                        '$currentProgress/${option.milestone}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      _buildGridItem(
+                        'জামাতে',
+                        controller.optionInJamayat[option.id] ?? false,
+                        (val) => controller.toggleOptionProperty(option.id, 'isInJamayat', val),
+                        Icons.groups,
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.add_circle_outline,
-                        color: AppColors.primary,
+                      _buildGridItem(
+                        'নিয়মিত',
+                        controller.optionRegularOrder[option.id] ?? false,
+                        (val) => controller.toggleOptionProperty(option.id, 'isRegularOrder', val),
+                        Icons.schedule,
                       ),
-                      onPressed: () => controller.incrementOptionCount(option.id),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-
-            // Prayer-specific options section
-            if (option.isSalatTracking) ...[
-              const Divider(height: 1),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildPropertyRow(
-                      'মসজিদে',
-                      controller.optionInMosque[option.id] ?? false,
-                      (val) => controller.toggleOptionProperty(option.id, 'isInMosque', val),
-                    ),
-                    _buildPropertyRow(
-                      'জামাতে',
-                      controller.optionInJamayat[option.id] ?? false,
-                      (val) => controller.toggleOptionProperty(option.id, 'isInJamayat', val),
-                    ),
-                    _buildPropertyRow(
-                      'নিয়মিত সময়ে',
-                      controller.optionRegularOrder[option.id] ?? false,
-                      (val) => controller.toggleOptionProperty(option.id, 'isRegularOrder', val),
-                    ),
-                    _buildPropertyRow(
-                      'খুশু-খুযু',
-                      controller.optionKhushuKhuzu[option.id] ?? false,
-                      (val) => controller.toggleOptionProperty(option.id, 'isKhushuKhuzu', val),
-                    ),
-                    
-                    // Khushu Level Slider
-                    if (controller.optionKhushuKhuzu[option.id] == true) ...[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Row(
-                          children: [
-                            Text('খুশু লেভেল:', 
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.shade700,
-                              ),
-                            ),
-                            Expanded(
-                              child: Slider(
-                                value: (controller.optionKhushuLevel[option.id] ?? 0).toDouble(),
-                                min: 0,
-                                max: 5,
-                                divisions: 5,
-                                label: '${controller.optionKhushuLevel[option.id] ?? 0}',
-                                onChanged: (value) => controller.updateKhushuLevel(option.id, value.toInt()),
-                                activeColor: AppColors.primary,
-                              ),
-                            ),
-                            Text(
-                              '${controller.optionKhushuLevel[option.id] ?? 0}',
-                              style: const TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
+                      _buildGridItem(
+                        'খুশু-খুযু',
+                        controller.optionKhushuKhuzu[option.id] ?? false,
+                        (val) => controller.toggleOptionProperty(option.id, 'isKhushuKhuzu', val),
+                        Icons.psychology,
                       ),
                     ],
+                  ),
 
-                    _buildPropertyRow(
-                      'ক্বাদা',
-                      controller.optionQadha[option.id] ?? false,
-                      (val) => controller.toggleOptionProperty(option.id, 'isQadha', val),
-                    ),
-                    _buildPropertyRow(
-                      'হায়েয/নিফাস',
-                      controller.optionHayez[option.id] ?? false,
-                      (val) => controller.toggleOptionProperty(option.id, 'isHayez', val),
-                    ),
-                    _buildPropertyRow(
-                      'ক্বসর',
-                      controller.optionQasr[option.id] ?? false,
-                      (val) => controller.toggleOptionProperty(option.id, 'isQasr', val),
+                  // Khushu Level Slider
+                  if (controller.optionKhushuKhuzu[option.id] == true) ...[
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        const Icon(Icons.trending_up, size: 18),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Slider(
+                            value: (controller.optionKhushuLevel[option.id] ?? 0).toDouble(),
+                            min: 0,
+                            max: 5,
+                            divisions: 5,
+                            label: '${controller.optionKhushuLevel[option.id] ?? 0}',
+                            onChanged: (value) => controller.updateKhushuLevel(option.id, value.toInt()),
+                          ),
+                        ),
+                        Container(
+                          width: 24,
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${controller.optionKhushuLevel[option.id] ?? 0}',
+                            style: const TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
+
+                  const SizedBox(height: 8),
+
+                  // Secondary options grid
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    childAspectRatio: 2.2,
+                    children: [
+                      _buildGridItem(
+                        'ক্বাদা',
+                        controller.optionQadha[option.id] ?? false,
+                        (val) => controller.toggleOptionProperty(option.id, 'isQadha', val),
+                        Icons.update,
+                      ),
+                      _buildGridItem(
+                        'হায়েয',
+                        controller.optionHayez[option.id] ?? false,
+                        (val) => controller.toggleOptionProperty(option.id, 'isHayez', val),
+                        Icons.do_not_disturb,
+                      ),
+                      _buildGridItem(
+                        'ক্বসর',
+                        controller.optionQasr[option.id] ?? false,
+                        (val) => controller.toggleOptionProperty(option.id, 'isQasr', val),
+                        Icons.compress,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGridItem(String label, bool value, Function(bool) onChanged, IconData icon) {
+    return Material(
+      color: value ? AppColors.primary.withOpacity(0.1) : Colors.grey.shade50,
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        onTap: () => onChanged(!value),
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: value ? AppColors.primary : Colors.grey.shade300,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: value ? AppColors.primary : Colors.grey.shade600,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: value ? AppColors.primary : Colors.grey.shade600,
                 ),
               ),
             ],
-          ],
-        ],
+          ),
+        ),
       ),
     );
   }

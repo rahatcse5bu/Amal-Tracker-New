@@ -12,10 +12,40 @@ class PrayerTimesView extends GetView<PrayerTimesController> {
       appBar: AppBar(
         title: const Text('Prayer Times'),
         backgroundColor: AppColors.primary,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => controller.fetchPrayerTimes(),
+          ),
+        ],
       ),
       body: Obx(() {
+        // Add initialization check
+        if (controller.position.value == null) {
+          return const Center(
+            child: Text('Waiting for location...'),
+          );
+        }
+
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
+        }
+
+        final prayers = controller.prayerTimes.value;
+        if (prayers == null) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('No prayer times available'),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => controller.getCurrentLocation(),
+                  child: const Text('Refresh'),
+                ),
+              ],
+            ),
+          );
         }
 
         return SingleChildScrollView(
@@ -72,17 +102,17 @@ class PrayerTimesView extends GetView<PrayerTimesController> {
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
-                        _buildPrayerTimeRow('Fajr', '5:12 AM'),
+                        _buildPrayerTimeRow('Fajr', prayers.fajr.starts),
                         const Divider(),
-                        _buildPrayerTimeRow('Sunrise', '6:32 AM'),
+                        _buildPrayerTimeRow('Sunrise', prayers.sunrise.starts),
                         const Divider(),
-                        _buildPrayerTimeRow('Dhuhr', '12:15 PM'),
+                        _buildPrayerTimeRow('Dhuhr', prayers.dhuhr.starts),
                         const Divider(),
-                        _buildPrayerTimeRow('Asr', '4:30 PM'),
+                        _buildPrayerTimeRow('Asr', prayers.asr.starts),
                         const Divider(),
-                        _buildPrayerTimeRow('Maghrib', '6:45 PM'),
+                        _buildPrayerTimeRow('Maghrib', prayers.maghrib.starts),
                         const Divider(),
-                        _buildPrayerTimeRow('Isha', '8:00 PM'),
+                        _buildPrayerTimeRow('Isha', prayers.isha.starts),
                       ],
                     ),
                   ),

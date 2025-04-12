@@ -45,6 +45,35 @@ class PrayerTimes {
           .toList(),
     );
   }
+
+  // Add toJson method
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date.toIso8601String(),
+      'fajr': {
+        'starts': fajr.starts,
+        'ends': fajr.ends,
+        'iqamah': fajr.iqamah,
+      },
+      // ...similar for other prayers...
+    };
+  }
+
+  // Add data validation
+  bool isValid() {
+    return fajr.starts.isNotEmpty && 
+           sunrise.starts.isNotEmpty && 
+           dhuhr.starts.isNotEmpty &&
+           asr.starts.isNotEmpty &&
+           maghrib.starts.isNotEmpty &&
+           isha.starts.isNotEmpty;
+  }
+
+  // Add toString method for debugging
+  @override
+  String toString() {
+    return 'PrayerTimes(fajr: ${fajr.starts}, dhuhr: ${dhuhr.starts})';
+  }
 }
 
 class Prayer {

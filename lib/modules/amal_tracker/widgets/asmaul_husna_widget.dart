@@ -3,7 +3,7 @@ import 'package:get/state_manager.dart';
 
 import '../../../Data/data.dart';
 import '../../../app/constants/app_color.dart';
-import '../controller/ramadan_planner_controller.dart';
+import '../controller/amal_tracker_controller.dart';
 
 class AsmaulHusnaWidget extends GetWidget<RamadanPlannerController> {
   const AsmaulHusnaWidget({super.key});

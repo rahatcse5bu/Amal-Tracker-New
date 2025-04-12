@@ -7,7 +7,7 @@ import '../../../app/common/storage/storage_controller.dart';
 import '../../../app/translation/translation_keys.dart';
 import '../../dashboard/controller/dashboard_controller.dart';
 import '../models/tracking_options_model.dart';
-import 'ramadan_planner_controller.dart';
+import 'amal_tracker_controller.dart';
 
 class TrackingController extends GetxController {
   final int ramadanDay;

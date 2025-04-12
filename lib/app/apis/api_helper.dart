@@ -2,14 +2,14 @@ import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:amal_tracker/modules/dus-list/models/dua_model.dart';
 
+import '../../modules/amal_tracker/models/tracking_options_model.dart';
 import '../../modules/borjoniyo/models/borjoniyo_model.dart';
 import '../../modules/dashboard/models/user_model.dart';
 import '../../modules/koroniyo/models/koroniyo_model.dart';
 import '../../modules/login/models/login_request_model.dart'
     show LoginRequestModel;
 import '../../modules/login/models/login_response_model.dart';
-import '../../modules/ramadan_planner/models/ayat_model.dart';
-import '../../modules/ramadan_planner/models/tracking_options_model.dart';
+
 import '../../modules/register/models/register_model.dart';
 import '../common/models/ayat_model.dart';
 import '../common/models/hadith_model.dart';

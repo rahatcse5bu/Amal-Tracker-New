@@ -4,7 +4,7 @@ import 'package:amal_tracker/app/common/storage/storage_controller.dart';
 
 import '../../../Data/data.dart';
 import '../../../app/constants/app_color.dart';
-import '../controller/ramadan_planner_controller.dart';
+import '../controller/amal_tracker_controller.dart';
 
 class AchievementWidget extends GetWidget<RamadanPlannerController> {
   final int ramadan_day;

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:confetti/confetti.dart';
 import 'package:get/get.dart';
 import 'package:localstorage/localstorage.dart';
@@ -70,12 +72,13 @@ class TrackingController extends GetxController {
         optionQasr[optionId] = value;
         break;
     }
-    updateTrackingOption(optionId, true); // Update on server
+    updateTrackingOption(optionId, true); // Trigger update with new values
   }
 
   void updateKhushuLevel(String optionId, int level) {
     optionKhushuLevel[optionId] = level.clamp(1, 5);
-    updateTrackingOption(optionId, true);
+    update();
+    updateTrackingOption(optionId, true); // Trigger update with new values
   }
 
   void incrementOptionCount(String optionId) {
@@ -85,6 +88,7 @@ class TrackingController extends GetxController {
     final maxCount = option.milestone > 0 ? option.milestone : 100;
     currentProgress[optionId] = ((currentProgress[optionId] ?? 0) + 1).clamp(0, maxCount);
     update();
+    updateTrackingOption(optionId, true); // Trigger update with new values
   }
 
   void decrementOptionCount(String optionId) {
@@ -94,6 +98,7 @@ class TrackingController extends GetxController {
     final maxCount = option.milestone > 0 ? option.milestone : 100;
     currentProgress[optionId] = ((currentProgress[optionId] ?? 0) - 1).clamp(0, maxCount);
     update();
+    updateTrackingOption(optionId, true); // Trigger update with new values
   }
 
   void updateOptionCount(String optionId, int value) {
@@ -212,16 +217,49 @@ class TrackingController extends GetxController {
   }
 
   Future<void> updateTrackingOption(String optionId, bool newValue) async {
+   
     String userId = await StorageHelper.getUserId() ?? '';
+    final option = trackingOptions.firstWhereOrNull((o) => o.id == optionId);
+    if (option == null) return;
 
     loadingStates[optionId] = true;
+
+    // Calculate totalPoint based on totalCount and milestone
+    final int totalCount = currentProgress[optionId] ?? 0;
+    final int totalPoint = option.milestone > 0
+        ? ((totalCount / option.milestone) * option.point).toInt()
+        : 0;
+
+    // Prepare the payload
+    final payload = {
+      "isInMosque": optionInMosque[optionId] ?? false,
+      "isKhushuKhuzu": optionKhushuKhuzu[optionId] ?? false,
+      "isQadha": optionQadha[optionId] ?? false,
+      "isRegularOrder": optionRegularOrder[optionId] ?? false,
+      "khushuLevel": optionKhushuLevel[optionId],
+      "isInJamayat": optionInJamayat[optionId] ?? false,
+      "isSalatTracking": option.isSalatTracking,
+      "isHayez": optionHayez[optionId] ?? false,
+      "isQasr": optionQasr[optionId] ?? false,
+      "totalCount": totalCount,
+      "totalPoint": totalPoint,
+    };
+ log("new payload:  ${payload}");
     final result = await apiHelper.updateUserTrackingOption(
-        slug, optionId, userId, ramadanDay);
+      slug,
+      optionId,
+      userId,
+      ramadanDay,
+      payload // Add the missing argument
+    );
+
     result.fold(
       (error) {
         loadingStates[optionId] = false;
+        log("errr: ${error}");
       },
       (message) {
+         log("msgg: ${message}");
         loadingStates[optionId] = false;
         Future.delayed(const Duration(milliseconds: 300), () {
           if (newValue) {

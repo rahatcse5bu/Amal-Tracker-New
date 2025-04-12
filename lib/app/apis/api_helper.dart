@@ -32,7 +32,7 @@ Future<Either<CustomError, List<AjkerHadithModel>>> fetchAjkerHadith();
   Future<Either<CustomError, String>> addInputValueForUser(
       int ramadanDay, String value);
   Future<Either<CustomError, String>> updateUserTrackingOption(
-      String slug, String optionId, String userId, int ramadanDay);
+      String slug, String optionId, String userId, int ramadanDay, Map<String, dynamic> payload);
   Future<Either<CustomError, String>> addPoints(
       String userId, int ramadanDay, int points);
   // Future<Either<CustomError, List<dynamic>>> fetchTrackingOptions(String slug);

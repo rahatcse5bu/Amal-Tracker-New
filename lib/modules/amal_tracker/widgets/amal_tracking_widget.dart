@@ -337,7 +337,7 @@ class AmalTracker extends StatelessWidget {
             onTap: () {
               final newValue = !checked;
               controller.updateTrackingOption(option.id, newValue);
-              controller.submitPoints(newValue ? option.point : -option.point);
+            //  controller.submitPoints(newValue ? option.point : -option.point);
             },
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(16),

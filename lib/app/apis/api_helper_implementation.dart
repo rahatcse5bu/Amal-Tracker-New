@@ -299,13 +299,14 @@ Future<Either<CustomError, List<TrackingOption>>> fetchTrackingOptions(String sl
   /// Update a user's tracking option.
   @override
   Future<Either<CustomError, String>> updateUserTrackingOption(
-      String slug, String optionId, String userId, int ramadanDay) async {
+      String slug, String optionId, String userId, int ramadanDay, Map<String, dynamic> additionalData) async {
     final day = 'day$ramadanDay';
     final response = await patch(
       'trackings/add-user-to-tracking/$slug/$optionId',
       {
         'user': userId,
         'day': day,
+        ...additionalData, // Include additional data in the request
       },
     );
     if (response.statusCode == 200) {

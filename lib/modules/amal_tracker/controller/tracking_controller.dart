@@ -110,71 +110,89 @@ class TrackingController extends GetxController {
   }
 
   void loadTrackingOptions({bool isToggling = false}) async {
-    if (!isToggling) isLoadingOptions(true);
+    try {
+      if (!isToggling) isLoadingOptions(true);
 
-    final result = await apiHelper.fetchTrackingOptions(slug);
-    result.fold(
-      (error) {
-        print("Error: $error");
-        isLoadingOptions(false);
-      },
-      (options) {
-        print("Loaded ${options.length} options");
-        
-        // Clear all state maps
-        checkedStates.clear();
-        loadingStates.clear();
-        optionInMosque.clear();
-        optionKhushuKhuzu.clear();
-        optionQadha.clear();
-        optionRegularOrder.clear();
-        optionInJamayat.clear();
-        optionKhushuLevel.clear();
-        optionHayez.clear();
-        optionQasr.clear();
-        currentProgress.clear();
+      final result = await apiHelper.fetchTrackingOptions(slug);
+      result.fold(
+        (error) {
+          print("Error: $error");
+          isLoadingOptions(false);
+        },
+        (options) {
+          print("Loaded ${options.length} options");
+          
+          // Clear all state maps
+          checkedStates.clear();
+          loadingStates.clear();
+          optionInMosque.clear();
+          optionKhushuKhuzu.clear();
+          optionQadha.clear();
+          optionRegularOrder.clear();
+          optionInJamayat.clear();
+          optionKhushuLevel.clear();
+          optionHayez.clear();
+          optionQasr.clear();
+          currentProgress.clear();
 
-        // First, initialize all options with default values
-        for (var option in options) {
-          loadingStates[option.id] = false;
-          checkedStates[option.id] = false;
-          optionInMosque[option.id] = false;
-          optionKhushuKhuzu[option.id] = false;
-          optionQadha[option.id] = false;
-          optionRegularOrder[option.id] = false;
-          optionInJamayat[option.id] = false;
-          optionKhushuLevel[option.id] = 0;
-          optionHayez[option.id] = false;
-          optionQasr[option.id] = false;
-          currentProgress[option.id] = 0;
-        }
-
-        // Then update user-specific data
-        for (var option in options) {
-          // Find matching user entry by user ID and day
-          final userEntry = option.users.firstWhereOrNull(
-            (entry) => entry.id == userId.value && entry.day == 'day$ramadanDay',
-          );
-
-          if (userEntry != null) {
-            checkedStates[option.id] = true;
-            // Use the values from userEntry instead of option
-            optionInMosque[option.id] = userEntry.isInMosque;
-            optionKhushuKhuzu[option.id] = userEntry.isKhushuKhuzu;
-            optionQadha[option.id] = userEntry.isQadha;
-            optionRegularOrder[option.id] = userEntry.isRegularOrder;
-            optionInJamayat[option.id] = userEntry.isInJamayat;
-            optionKhushuLevel[option.id] = userEntry.khushuLevel ?? 0;
-            optionHayez[option.id] = userEntry.isHayez;
-            optionQasr[option.id] = userEntry.isQasr;
-            currentProgress[option.id] = userEntry.totalCount;
+          // First, initialize all options with default values
+          for (var option in options) {
+            loadingStates[option.id] = false;
+            checkedStates[option.id] = false;
+            optionInMosque[option.id] = false;
+            optionKhushuKhuzu[option.id] = false;
+            optionQadha[option.id] = false;
+            optionRegularOrder[option.id] = false;
+            optionInJamayat[option.id] = false;
+            optionKhushuLevel[option.id] = 0;
+            optionHayez[option.id] = false;
+            optionQasr[option.id] = false;
+            currentProgress[option.id] = 0;
           }
-        }
 
-        trackingOptions.assignAll(options);
-        isLoadingOptions(false);
-      },
-    );
+          // Then update user-specific data
+          for (var option in options) {
+            // Find matching user entry by user ID and day
+            final userEntry = option.users.firstWhereOrNull(
+              (entry) => entry.id == userId.value && entry.day == 'day$ramadanDay',
+            );
+
+            if (userEntry != null) {
+              checkedStates[option.id] = true;
+              // Use the values from userEntry instead of option
+              optionInMosque[option.id] = userEntry.isInMosque is bool
+                  ? userEntry.isInMosque
+                  : userEntry.isInMosque == 'true';
+              optionKhushuKhuzu[option.id] = userEntry.isKhushuKhuzu is bool
+                  ? userEntry.isKhushuKhuzu
+                  : userEntry.isKhushuKhuzu == 'true';
+              optionQadha[option.id] = userEntry.isQadha is bool
+                  ? userEntry.isQadha
+                  : userEntry.isQadha == 'true';
+              optionRegularOrder[option.id] = userEntry.isRegularOrder is bool
+                  ? userEntry.isRegularOrder
+                  : userEntry.isRegularOrder == 'true';
+              optionInJamayat[option.id] = userEntry.isInJamayat is bool
+                  ? userEntry.isInJamayat
+                  : userEntry.isInJamayat == 'true';
+              optionKhushuLevel[option.id] = userEntry.khushuLevel ?? 0;
+              optionHayez[option.id] = userEntry.isHayez is bool
+                  ? userEntry.isHayez
+                  : userEntry.isHayez == 'true';
+              optionQasr[option.id] = userEntry.isQasr is bool
+                  ? userEntry.isQasr
+                  : userEntry.isQasr == 'true';
+              currentProgress[option.id] = userEntry.totalCount;
+            }
+          }
+
+          trackingOptions.assignAll(options);
+          isLoadingOptions(false);
+        },
+      );
+    } catch (error) {
+      print("Error: $error");
+    }
   }
 
   void fetchTodaysPoint({bool isAddPoint = false}) async {

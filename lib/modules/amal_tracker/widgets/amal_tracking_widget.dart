@@ -547,7 +547,7 @@ class AmalTracker extends StatelessWidget {
           ),
 
           // Add prayer-specific options in grid layout when checked
-          if (checked && option.isSalatTracking) ...[
+          if (option.isSalatTracking) ...[
             const Divider(height: 1),
             Padding(
               padding: const EdgeInsets.all(12),

@@ -48,4 +48,6 @@ Future<Either<CustomError, List<TrackingOption>>> fetchTrackingOptions(String sl
   Future<Either<CustomError, List<KoroniyoModel>>> fetchKoroniyo();
    Future<Either<CustomError, List<BorjoniyoModel>>> fetchBorjoniyo();
   Future<Map<String, dynamic>> fetchLatestVersion();
+  
+
 }

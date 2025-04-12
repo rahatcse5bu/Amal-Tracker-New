@@ -7,6 +7,8 @@ import '../../modules/dashboard/view/dashboard_view.dart';
 import '../../modules/dashboard/widgets/leaderboard_widget.dart';
 import '../../modules/dus-list/binding/dua_binding.dart';
 import '../../modules/dus-list/view/dua_view.dart';
+import '../../modules/home/view/home_view.dart';
+import '../../modules/home/binding/home_binding.dart';
 import '../../modules/koroniyo/binding/koroniyo_binding.dart';
 import '../../modules/koroniyo/view/koroniyo_view.dart';
 import '../../modules/login/binding/login_binding.dart';
@@ -17,22 +19,28 @@ import '../../modules/ramadan_planner/binding/ramadan_planner_binding.dart';
 import '../../modules/ramadan_planner/view/ramadan_planner_view.dart';
 import '../../modules/register/binding/register_binding.dart';
 import '../../modules/register/view/register_view.dart';
+import '../../modules/tracking_overview/view/tracking_overview_view.dart';
+import '../../modules/tracking_overview/binding/tracking_overview_binding.dart';
+import '../../modules/prayer_times/view/prayer_times_view.dart';
+import '../../modules/prayer_times/binding/prayer_times_binding.dart';
 import '../../splash.dart';
 
 class Routes {
   static const splash = '/splash';
   static const home = '/home';
   static const register = '/register';
-  static const emailVarification = '/email-varification';
   static const login = '/login';
-  static const profile = '/profile';
   static const dashboard = '/dashboard';
+  static const ramadanPlanner = '/ramadan-planner';
+  static const trackingOverview = '/tracking-overview';
+  static const emailVarification = '/email-varification';
+  static const profile = '/profile';
   static const leaderboard = '/leaderboard';
   static const tasks = '/tasks';
-  static const ramadanPlanner = '/ramadan-planner';
   static const borjoniyo = '/borjoniyo';
   static const koroniyo = '/koroniyo';
   static const duaList = '/duaList';
+  static const prayerTimes = '/prayer-times';
 
   // Dynamic route generator for single task
   // static String singleTask(String id) => '/task/$id';
@@ -47,6 +55,11 @@ class AppPages {
       page: () => const SplashScreen(),
     ),
     GetPage(
+      name: Routes.home,
+      page: () => const HomeView(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
       name: Routes.register,
       page: () => RegisterView(),
       binding: RegisterBinding(),
@@ -57,39 +70,44 @@ class AppPages {
       binding: LoginBinding(),
     ),
     GetPage(
-        name: Routes.dashboard,
-        page: () => DashboardView(),
-        binding: DashboardBinding()),
+      name: Routes.dashboard,
+      page: () => DashboardView(),
+      binding: DashboardBinding(),
+    ),
     GetPage(
       name: Routes.ramadanPlanner,
       page: () => RamadanPlannerView(),
       binding: RamadanPlannerBinding(),
     ),
     GetPage(
-      name: Routes.home,
-      page: () => MainView(), // Main view with nav bar
-      binding: MainViewBinding(),
+      name: Routes.trackingOverview,
+      page: () => const TrackingOverviewView(),
+      binding: TrackingOverviewBinding(),
     ),
     GetPage(
       name: Routes.leaderboard,
-      page: () => LeaderboardWidget(), // Main view with nav bar
-      bindings: [RamadanPlannerBinding(),DashboardBinding() ],
+      page: () => LeaderboardWidget(),
+      bindings: [RamadanPlannerBinding(), DashboardBinding()],
     ),
-        GetPage(
+    GetPage(
       name: Routes.borjoniyo,
       page: () => BorjoniyoView(),
       binding: BorjoniyoBinding(),
     ),
-        GetPage(
+    GetPage(
       name: Routes.koroniyo,
       page: () => KoroniyoView(),
-      binding:KoroniyoBinding(),
+      binding: KoroniyoBinding(),
     ),
     GetPage(
-  name: Routes.duaList,
-  page: () => const DuaView(),
-  binding: DuaBinding(),
-),
-
+      name: Routes.duaList,
+      page: () => const DuaView(),
+      binding: DuaBinding(),
+    ),
+    GetPage(
+      name: Routes.prayerTimes,
+      page: () => const PrayerTimesView(),
+      binding: PrayerTimesBinding(),
+    ),
   ];
 }

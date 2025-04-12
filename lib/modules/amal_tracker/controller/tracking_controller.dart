@@ -259,10 +259,12 @@ class TrackingController extends GetxController {
         log("errr: ${error}");
       },
       (message) {
-         log("msgg: ${message}");
+        log("msgg: ${message}");
         loadingStates[optionId] = false;
         Future.delayed(const Duration(milliseconds: 300), () {
-          if (newValue) {
+          // Check if the response indicates success
+          if (newValue && (message == "Update successful" || message.length > 0)) {
+            checkedStates[option.id]=true;
             confettiController.play();
           }
         });

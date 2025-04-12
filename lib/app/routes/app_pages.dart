@@ -57,7 +57,10 @@ class AppPages {
     GetPage(
       name: Routes.home,
       page: () => const HomeView(),
-      binding: HomeBinding(),
+      bindings: [
+        HomeBinding(), // Ensure HomeController is registered
+        PrayerTimesBinding(),
+      ],
     ),
     GetPage(
       name: Routes.register,

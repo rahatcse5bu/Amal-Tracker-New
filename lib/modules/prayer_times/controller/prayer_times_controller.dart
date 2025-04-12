@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:adhan/adhan.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 import '../models/prayer_time_model.dart' as model;
 import 'dart:async';
 
@@ -20,7 +21,7 @@ class PrayerTimesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getCurrentLocation();
+    _checkAndRequestLocation();
     // Update times every minute and when prayer times change
     ever(prayerTimes, (_) => updateCurrentPrayer());
     Timer.periodic(const Duration(minutes: 1), (_) {
@@ -33,36 +34,190 @@ class PrayerTimesController extends GetxController {
     });
   }
 
+  Future<void> _checkAndRequestLocation() async {
+    try {
+      // First check if location service is enabled
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await Get.dialog(
+          AlertDialog(
+            title: const Text('Location Services Disabled'),
+            content: const Text('Please enable location services to get prayer times for your area.'),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  Get.back();
+                  await Geolocator.openLocationSettings();
+                  // Check again after settings
+                  await _checkAndRequestLocation();
+                },
+                child: const Text('ENABLE'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
+      // Check permission status
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          Get.snackbar(
+            'Permission Required',
+            'Location permission is needed to show prayer times',
+            snackPosition: SnackPosition.BOTTOM,
+            duration: const Duration(seconds: 3),
+          );
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        await Get.dialog(
+          AlertDialog(
+            title: const Text('Permission Denied'),
+            content: const Text('Location permission is permanently denied. Please enable it in app settings.'),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  Get.back();
+                  await Geolocator.openAppSettings();
+                  // Check again after settings
+                  await _checkAndRequestLocation();
+                },
+                child: const Text('OPEN SETTINGS'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
+      // If we get here, we have permission, so get location
+      await getCurrentLocation();
+    } catch (e) {
+      print('Error in location check: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to initialize location services',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
   Future<void> getCurrentLocation() async {
     try {
       isLoading(true);
       
-      // Check location permission
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
+      // Check if location service is enabled
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        // Show dialog instead of snackbar for better visibility
+        await Get.dialog(
+          AlertDialog(
+            title: const Text('Location Service Disabled'),
+            content: const Text('Please enable location services to get prayer times.'),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  Get.back();
+                  await Geolocator.openLocationSettings();
+                },
+                child: const Text('OPEN SETTINGS'),
+              ),
+            ],
+          ),
+          barrierDismissible: false,
+        );
+        return;
       }
 
-      // Get current position
-      Position currentPosition = await Geolocator.getCurrentPosition();
+      // Check and request permission
+      LocationPermission permission = await Geolocator.checkPermission();
+      
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          Get.snackbar(
+            'Error',
+            'Location permission denied. Prayer times will not be accurate.',
+            snackPosition: SnackPosition.BOTTOM,
+            duration: const Duration(seconds: 5),
+          );
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        await Get.dialog(
+          AlertDialog(
+            title: const Text('Permission Denied'),
+            content: const Text(
+              'Location permission is permanently denied. Please enable it in app settings.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(),
+                child: const Text('CANCEL'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Get.back();
+                  await Geolocator.openAppSettings();
+                },
+                child: const Text('OPEN SETTINGS'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
+      // Get position with timeout
+      print('Getting position...');
+      Position currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      ).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Location request timed out');
+        },
+      );
+
+      print('Position received: ${currentPosition.latitude}, ${currentPosition.longitude}');
       position.value = currentPosition;
 
       // Get address from coordinates
-      List<Placemark> placemarks = await placemarkFromCoordinates(
+      final placemarks = await placemarkFromCoordinates(
         currentPosition.latitude,
         currentPosition.longitude,
       );
 
       if (placemarks.isNotEmpty) {
-        Placemark place = placemarks[0];
-        currentLocation.value = '${place.locality}, ${place.country}';
+        final place = placemarks.first;
+        currentLocation.value = '${place.locality ?? ''}, ${place.country ?? ''}';
+        print('Location set to: ${currentLocation.value}');
       }
 
-      // Fetch prayer times for current location
+      // Fetch prayer times
       await fetchPrayerTimes();
       
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('Error getting location: $e');
+      print('Stack trace: $stackTrace');
+      
+      Get.snackbar(
+        'Error',
+        'Failed to get location: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 5),
+        mainButton: TextButton(
+          onPressed: () => getCurrentLocation(),
+          child: const Text('RETRY', style: TextStyle(color: Colors.white)),
+        ),
+      );
     } finally {
       isLoading(false);
     }

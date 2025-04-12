@@ -11,7 +11,13 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final prayerController = Get.put(PrayerTimesController());
+    // Initialize prayer controller only once
+    final prayerController = Get.find<PrayerTimesController>();
+    
+    // Refresh location if not already set
+    if (prayerController.position.value == null) {
+      prayerController.getCurrentLocation();
+    }
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,

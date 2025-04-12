@@ -20,10 +20,19 @@ class PrayerTimesView extends GetView<PrayerTimesController> {
         ],
       ),
       body: Obx(() {
-        // Add initialization check
         if (controller.position.value == null) {
-          return const Center(
-            child: Text('Waiting for location...'),
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Location permission is required'),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => controller.getCurrentLocation(),
+                  child: const Text('Grant Permission'),
+                ),
+              ],
+            ),
           );
         }
 

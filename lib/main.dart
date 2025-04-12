@@ -3,6 +3,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geolocator/geolocator.dart';
 import 'app/common/binding/global_binding.dart';
 import 'app/common/controller/app_update_controller.dart';
 import 'app/routes/app_pages.dart';
@@ -13,17 +14,17 @@ import 'modules/dashboard/controller/dashboard_controller.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize();
-   final languageController = Get.put(LanguageController());  // Direct put (not lazy)
+  
+  // Initialize location service
+  await Geolocator.requestPermission();
+  await Geolocator.isLocationServiceEnabled();
+
+  final languageController = Get.put(LanguageController());  // Direct put (not lazy)
 
   // Ensure locale is loaded before app starts
   await languageController.loadLocale();   // New function you will add below
   Get.lazyPut(() => DashboardController());
   Get.lazyPut(() => AppUpdateController());
-
-    
-  // Get.put<ApiHelper>(ApiHelper());           // Add this!
-  // Get.put<AppUpdateController>(AppUpdateController());
-  // await languageController.appLocale(); // Load locale before app start
 
   runApp(MyApp());
 }

@@ -545,6 +545,143 @@ class AmalTracker extends StatelessWidget {
               ),
             ),
           ),
+
+          // Add new sections after the main content when checked
+          if (checked) ...[
+            // Countable options section
+            if (option.isCountable) ...[
+              const Divider(height: 1),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove_circle_outline, 
+                        color: AppColors.primary.withOpacity(0.7),
+                      ),
+                      onPressed: () => controller.decrementOptionCount(option.id),
+                    ),
+                    Container(
+                      width: 80,
+                      alignment: Alignment.center,
+                      child: Text(
+                        '$currentProgress/${option.milestone}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add_circle_outline,
+                        color: AppColors.primary,
+                      ),
+                      onPressed: () => controller.incrementOptionCount(option.id),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+
+            // Prayer-specific options section
+            if (option.isSalatTracking) ...[
+              const Divider(height: 1),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildPropertyRow(
+                      'মসজিদে',
+                      controller.optionInMosque[option.id] ?? false,
+                      (val) => controller.toggleOptionProperty(option.id, 'isInMosque', val),
+                    ),
+                    _buildPropertyRow(
+                      'জামাতে',
+                      controller.optionInJamayat[option.id] ?? false,
+                      (val) => controller.toggleOptionProperty(option.id, 'isInJamayat', val),
+                    ),
+                    _buildPropertyRow(
+                      'নিয়মিত সময়ে',
+                      controller.optionRegularOrder[option.id] ?? false,
+                      (val) => controller.toggleOptionProperty(option.id, 'isRegularOrder', val),
+                    ),
+                    _buildPropertyRow(
+                      'খুশু-খুযু',
+                      controller.optionKhushuKhuzu[option.id] ?? false,
+                      (val) => controller.toggleOptionProperty(option.id, 'isKhushuKhuzu', val),
+                    ),
+                    
+                    // Khushu Level Slider
+                    if (controller.optionKhushuKhuzu[option.id] == true) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Row(
+                          children: [
+                            Text('খুশু লেভেল:', 
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade700,
+                              ),
+                            ),
+                            Expanded(
+                              child: Slider(
+                                value: (controller.optionKhushuLevel[option.id] ?? 0).toDouble(),
+                                min: 0,
+                                max: 5,
+                                divisions: 5,
+                                label: '${controller.optionKhushuLevel[option.id] ?? 0}',
+                                onChanged: (value) => controller.updateKhushuLevel(option.id, value.toInt()),
+                                activeColor: AppColors.primary,
+                              ),
+                            ),
+                            Text(
+                              '${controller.optionKhushuLevel[option.id] ?? 0}',
+                              style: const TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+
+                    _buildPropertyRow(
+                      'ক্বাদা',
+                      controller.optionQadha[option.id] ?? false,
+                      (val) => controller.toggleOptionProperty(option.id, 'isQadha', val),
+                    ),
+                    _buildPropertyRow(
+                      'হায়েয/নিফাস',
+                      controller.optionHayez[option.id] ?? false,
+                      (val) => controller.toggleOptionProperty(option.id, 'isHayez', val),
+                    ),
+                    _buildPropertyRow(
+                      'ক্বসর',
+                      controller.optionQasr[option.id] ?? false,
+                      (val) => controller.toggleOptionProperty(option.id, 'isQasr', val),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPropertyRow(String label, bool value, Function(bool) onChanged) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(fontSize: 14)),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeColor: AppColors.primary,
+          ),
         ],
       ),
     );

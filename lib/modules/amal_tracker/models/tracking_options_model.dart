@@ -56,20 +56,48 @@ class TrackingOption {
       id: json['_id'] ?? '',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
-      point: json['point'] ?? 0,
-      index: json['index'] ?? 0,
-      milestone: json['milestone'] ?? 0,
-      totalCount: json['totalCount'] ?? 0,
-      isInMosque: json['isInMosque'] ?? false,
-      isKhushuKhuzu: json['isKhushuKhuzu'] ?? false,
-      isQadha: json['isQadha'] ?? false,
-      isRegularOrder: json['isRegularOrder'] ?? false,
-      isInJamayat: json['isInJamayat'] ?? false,
-      khushuLevel: json['khushuLevel'] ?? 0,
-      isCountable: json['isCountable'] ?? false,
-      isSalatTracking: json['isSalatTracking'] ?? false,
-      isHayez: json['isHayez'] ?? false,
-      isQasr: json['isQasr'] ?? false,
+      point: json['point'] is int
+          ? json['point']
+          : int.tryParse(json['point']?.toString() ?? '0') ?? 0,
+      index: json['index'] is int
+          ? json['index']
+          : int.tryParse(json['index']?.toString() ?? '0') ?? 0,
+      milestone: json['milestone'] is int
+          ? json['milestone']
+          : int.tryParse(json['milestone']?.toString() ?? '0') ?? 0,
+      totalCount: json['totalCount'] is int
+          ? json['totalCount']
+          : int.tryParse(json['totalCount']?.toString() ?? '0') ?? 0,
+      isInMosque: json['isInMosque'] is bool
+          ? json['isInMosque']
+          : json['isInMosque'] == 'true',
+      isKhushuKhuzu: json['isKhushuKhuzu'] is bool
+          ? json['isKhushuKhuzu']
+          : json['isKhushuKhuzu'] == 'true',
+      isQadha: json['isQadha'] is bool
+          ? json['isQadha']
+          : json['isQadha'] == 'true',
+      isRegularOrder: json['isRegularOrder'] is bool
+          ? json['isRegularOrder']
+          : json['isRegularOrder'] == 'true',
+      isInJamayat: json['isInJamayat'] is bool
+          ? json['isInJamayat']
+          : json['isInJamayat'] == 'true',
+      khushuLevel: json['khushuLevel'] is int
+          ? json['khushuLevel']
+          : int.tryParse(json['khushuLevel']?.toString() ?? '0') ?? 0,
+      isCountable: json['isCountable'] is bool
+          ? json['isCountable']
+          : json['isCountable'] == 'true',
+      isSalatTracking: json['isSalatTracking'] is bool
+          ? json['isSalatTracking']
+          : json['isSalatTracking'] == 'true',
+      isHayez: json['isHayez'] is bool
+          ? json['isHayez']
+          : json['isHayez'] == 'true',
+      isQasr: json['isQasr'] is bool
+          ? json['isQasr']
+          : json['isQasr'] == 'true',
       users: (json['users'] as List<dynamic>? ?? [])
           .map((userJson) => UserEntry.fromJson(userJson))
           .toList(),
@@ -125,17 +153,39 @@ class UserEntry {
       id: json['_id'] ?? '',
       user: json['user'] ?? '',
       day: json['day'] ?? '',
-      isInMosque: json['isInMosque'] ?? false,
-      isKhushuKhuzu: json['isKhushuKhuzu'] ?? false,
-      isQadha: json['isQadha'] ?? false,
-      isRegularOrder: json['isRegularOrder'] ?? false,
-      khushuLevel: json['khushuLevel'],
-      isInJamayat: json['isInJamayat'] ?? false,
-      isSalatTracking: json['isSalatTracking'] ?? false,
-      isHayez: json['isHayez'] ?? false,
-      isQasr: json['isQasr'] ?? false,
-      totalCount: json['totalCount'] ?? 0,
-      totalPoint: json['totalPoint'] ?? 0,
+      isInMosque: json['isInMosque'] is bool
+          ? json['isInMosque']
+          : json['isInMosque'] == 'true',
+      isKhushuKhuzu: json['isKhushuKhuzu'] is bool
+          ? json['isKhushuKhuzu']
+          : json['isKhushuKhuzu'] == 'true',
+      isQadha: json['isQadha'] is bool
+          ? json['isQadha']
+          : json['isQadha'] == 'true',
+      isRegularOrder: json['isRegularOrder'] is bool
+          ? json['isRegularOrder']
+          : json['isRegularOrder'] == 'true',
+      isInJamayat: json['isInJamayat'] is bool
+          ? json['isInJamayat']
+          : json['isInJamayat'] == 'true',
+      isSalatTracking: json['isSalatTracking'] is bool
+          ? json['isSalatTracking']
+          : json['isSalatTracking'] == 'true',
+      isHayez: json['isHayez'] is bool
+          ? json['isHayez']
+          : json['isHayez'] == 'true',
+      isQasr: json['isQasr'] is bool
+          ? json['isQasr']
+          : json['isQasr'] == 'true',
+      khushuLevel: json['khushuLevel'] is int
+          ? json['khushuLevel']
+          : int.tryParse(json['khushuLevel']?.toString() ?? '0'),
+      totalCount: json['totalCount'] is int
+          ? json['totalCount']
+          : int.tryParse(json['totalCount']?.toString() ?? '0') ?? 0,
+      totalPoint: json['totalPoint'] is int
+          ? json['totalPoint']
+          : int.tryParse(json['totalPoint']?.toString() ?? '0') ?? 0,
       createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) : null,
       updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt']) : null,
     );

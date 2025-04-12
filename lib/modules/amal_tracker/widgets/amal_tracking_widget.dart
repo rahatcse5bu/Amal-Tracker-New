@@ -307,7 +307,9 @@ class AmalTracker extends StatelessWidget {
   }
 
   Widget _buildAmalCard(BuildContext context, TrackingController controller, TrackingOption option) {
-    final bool checked = controller.checkedStates[option.id] ?? false;
+    // Determine if the current user and day match any object in the users array
+    final bool checked = option.users.any((userEntry) =>
+        userEntry.user == controller.userId.value && userEntry.day == 'day${controller.ramadanDay}');
     final bool isLoading = controller.loadingStates[option.id] ?? false;
     final int currentProgress = controller.getCurrentProgress(option.id);
     final bool isMilestoneCompleted = option.milestone > 0 && currentProgress >= option.milestone;
@@ -337,7 +339,6 @@ class AmalTracker extends StatelessWidget {
             onTap: () {
               final newValue = !checked;
               controller.updateTrackingOption(option.id, newValue);
-            //  controller.submitPoints(newValue ? option.point : -option.point);
             },
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(16),

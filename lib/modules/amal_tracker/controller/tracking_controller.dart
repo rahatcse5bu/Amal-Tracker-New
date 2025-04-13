@@ -49,6 +49,7 @@ class TrackingController extends GetxController {
   }
 
   void toggleOptionProperty(String optionId, String property, bool value) {
+    // Update only the specific property
     switch (property) {
       case 'isInMosque':
         optionInMosque[optionId] = value;
@@ -72,7 +73,35 @@ class TrackingController extends GetxController {
         optionQasr[optionId] = value;
         break;
     }
-    updateTrackingOption(optionId, true); // Trigger update with new values
+
+    // Prepare the payload with the updated property and retain other properties
+    final payload = {
+      "isInMosque": optionInMosque[optionId] ?? false,
+      "isKhushuKhuzu": optionKhushuKhuzu[optionId] ?? false,
+      "isQadha": optionQadha[optionId] ?? false,
+      "isRegularOrder": optionRegularOrder[optionId] ?? false,
+      "khushuLevel": optionKhushuLevel[optionId],
+      "isInJamayat": optionInJamayat[optionId] ?? false,
+      "isSalatTracking": trackingOptions.firstWhereOrNull((o) => o.id == optionId)?.isSalatTracking ?? false,
+      "isHayez": optionHayez[optionId] ?? false,
+      "isQasr": optionQasr[optionId] ?? false,
+      "totalCount": currentProgress[optionId] ?? 0,
+      "totalPoint": calculateTotalPoint(optionId),
+    };
+
+    // Log the payload only once
+    log("new payload: ${payload}");
+
+    // Call updateTrackingOption only once
+    updateTrackingOption(optionId, true);
+  }
+
+  int calculateTotalPoint(String optionId) {
+    final option = trackingOptions.firstWhereOrNull((o) => o.id == optionId);
+    if (option == null || option.milestone <= 0) return 0;
+
+    final totalCount = currentProgress[optionId] ?? 0;
+    return ((totalCount / option.milestone) * option.point).toInt();
   }
 
   void updateKhushuLevel(String optionId, int level) {
@@ -217,7 +246,6 @@ class TrackingController extends GetxController {
   }
 
   Future<void> updateTrackingOption(String optionId, bool newValue) async {
-   
     String userId = await StorageHelper.getUserId() ?? '';
     final option = trackingOptions.firstWhereOrNull((o) => o.id == optionId);
     if (option == null) return;
@@ -244,33 +272,45 @@ class TrackingController extends GetxController {
       "totalCount": totalCount,
       "totalPoint": totalPoint,
     };
- log("new payload:  ${payload}");
+
+    // Log the payload only once
+    log("new payload: ${payload}");
+
     final result = await apiHelper.updateUserTrackingOption(
       slug,
       optionId,
       userId,
       ramadanDay,
-      payload // Add the missing argument
+      payload,
     );
 
     result.fold(
       (error) {
         loadingStates[optionId] = false;
-        log("errr: ${error}");
+        log("Error: ${error}");
       },
       (message) {
-        log("msgg: ${message}");
+        log("Message: ${message}");
         loadingStates[optionId] = false;
-        Future.delayed(const Duration(milliseconds: 300), () {
-          // Check if the response indicates success
-          if (newValue && (message == "Update successful" || message.length > 0)) {
-            checkedStates[option.id]=true;
-            confettiController.play();
-          }
-        });
+
+        // Update the local state directly
+        if (newValue && (message == "Update successful" || message.isNotEmpty)) {
+          checkedStates[optionId] = true;
+          confettiController.play();
+        }
+
+        // Safely update the specific option in the reactive state
+        final optionIndex = trackingOptions.indexWhere((o) => o.id == optionId);
+        if (optionIndex != -1) {
+          trackingOptions[optionIndex] = trackingOptions[optionIndex].copyWith(
+            totalCount: totalCount,
+            totalPoint: totalPoint,
+          );
+          trackingOptions.refresh(); // Ensure UI updates
+        }
+
         fetchTodaysPoint();
         dashboardController.fetchDashboardData();
-        loadTrackingOptions(isToggling: true);
       },
     );
   }
@@ -353,5 +393,40 @@ class TrackingController extends GetxController {
   void onClose() {
     confettiController.dispose();
     super.onClose();
+  }
+}
+
+// Add a helper method to copy and update TrackingOption
+extension TrackingOptionExtensions on TrackingOption {
+  TrackingOption copyWith({
+    int? totalCount,
+    int? totalPoint,
+  }) {
+    return TrackingOption(
+      id: id,
+      title: title,
+      description: description,
+      point: point,
+      index: index,
+      milestone: milestone,
+      totalCount: totalCount ?? this.totalCount,
+      isInMosque: isInMosque,
+      isKhushuKhuzu: isKhushuKhuzu,
+      isQadha: isQadha,
+      isRegularOrder: isRegularOrder,
+      isInJamayat: isInJamayat,
+      khushuLevel: khushuLevel,
+      isCountable: isCountable,
+      isSalatTracking: isSalatTracking,
+      isHayez: isHayez,
+      isQasr: isQasr,
+      users: users,
+      enTitle: enTitle,
+      enDescription: enDescription,
+      arTitle: arTitle,
+      arabic: arabic,
+      arDescription: arDescription,
+      descriptionEn: descriptionEn,
+    );
   }
 }

@@ -337,8 +337,8 @@ class AmalTracker extends StatelessWidget {
           // Main content section
           InkWell(
             onTap: () {
-              final newValue = !checked;
-              controller.updateTrackingOption(option.id, newValue);
+              // final newValue = !checked;
+              controller.updateTrackingOption(option.id, true);
             },
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(16),
@@ -567,25 +567,33 @@ class AmalTracker extends StatelessWidget {
                       _buildGridItem(
                         'মসজিদে',
                         controller.optionInMosque[option.id] ?? false,
-                        (val) => controller.toggleOptionProperty(option.id, 'isInMosque', val),
+                        (val) {
+                          controller.toggleOptionProperty(option.id, 'isInMosque', val);
+                        },
                         Icons.mosque,
                       ),
                       _buildGridItem(
                         'জামাতে',
                         controller.optionInJamayat[option.id] ?? false,
-                        (val) => controller.toggleOptionProperty(option.id, 'isInJamayat', val),
+                        (val) {
+                          controller.toggleOptionProperty(option.id, 'isInJamayat', val);
+                        },
                         Icons.groups,
                       ),
                       _buildGridItem(
                         'নিয়মিত',
                         controller.optionRegularOrder[option.id] ?? false,
-                        (val) => controller.toggleOptionProperty(option.id, 'isRegularOrder', val),
+                        (val) {
+                          controller.toggleOptionProperty(option.id, 'isRegularOrder', val);
+                        },
                         Icons.schedule,
                       ),
                       _buildGridItem(
                         'খুশু-খুযু',
                         controller.optionKhushuKhuzu[option.id] ?? false,
-                        (val) => controller.toggleOptionProperty(option.id, 'isKhushuKhuzu', val),
+                        (val) {
+                          controller.toggleOptionProperty(option.id, 'isKhushuKhuzu', val);
+                        },
                         Icons.psychology,
                       ),
                     ],
@@ -605,7 +613,10 @@ class AmalTracker extends StatelessWidget {
                             max: 5,
                             divisions: 5,
                             label: '${controller.optionKhushuLevel[option.id] ?? 0}',
-                            onChanged: (value) => controller.updateKhushuLevel(option.id, value.toInt()),
+                            onChanged: (value) {
+                              controller.updateKhushuLevel(option.id, value.toInt());
+                              controller.updateTrackingOption(option.id, true); // Update on server
+                            },
                           ),
                         ),
                         Container(
@@ -634,19 +645,25 @@ class AmalTracker extends StatelessWidget {
                       _buildGridItem(
                         'ক্বাদা',
                         controller.optionQadha[option.id] ?? false,
-                        (val) => controller.toggleOptionProperty(option.id, 'isQadha', val),
+                        (val) {
+                          controller.toggleOptionProperty(option.id, 'isQadha', val);
+                        },
                         Icons.update,
                       ),
                       _buildGridItem(
                         'হায়েয',
                         controller.optionHayez[option.id] ?? false,
-                        (val) => controller.toggleOptionProperty(option.id, 'isHayez', val),
+                        (val) {
+                          controller.toggleOptionProperty(option.id, 'isHayez', val);
+                        },
                         Icons.do_not_disturb,
                       ),
                       _buildGridItem(
                         'ক্বসর',
                         controller.optionQasr[option.id] ?? false,
-                        (val) => controller.toggleOptionProperty(option.id, 'isQasr', val),
+                        (val) {
+                          controller.toggleOptionProperty(option.id, 'isQasr', val);
+                        },
                         Icons.compress,
                       ),
                     ],
@@ -665,7 +682,9 @@ class AmalTracker extends StatelessWidget {
       color: value ? AppColors.primary.withOpacity(0.1) : Colors.grey.shade50,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
-        onTap: () => onChanged(!value),
+        onTap: () {
+          onChanged(!value); // Toggle the value
+        },
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
+import 'dart:math' show min;
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/connect.dart';
@@ -25,10 +28,10 @@ class ApiHelperImpl extends GetConnect implements ApiHelper {
   void onInit() {
     super.onInit();
 
-    log("url: ${'${AppConfig.baseUrl}${AppConfig.apiVersion}/'}");
+    log("🚀 API_INIT: BaseUrl = ${AppConfig.baseUrl}${AppConfig.apiVersion}/");
+    log("⏱️  Timeout = ${AppConfig.timeoutDuration} seconds");
     httpClient.baseUrl = '${AppConfig.baseUrl}${AppConfig.apiVersion}/';
     httpClient.timeout = const Duration(seconds: AppConfig.timeoutDuration);
-    log("ApiHelperImpl initialized with baseUrl: ${httpClient.baseUrl}");
     httpClient.defaultContentType = 'application/json';
 
     httpClient.addRequestModifier<Object?>((request) async {
@@ -36,47 +39,158 @@ class ApiHelperImpl extends GetConnect implements ApiHelper {
       if (token != null) {
         request.headers['Authorization'] = 'Bearer $token';
       }
-      log('Request: ${request.method} ${request.url}');
+      
+      log('═══════════════════════════════════════════════════════════');
+      log('📤 API_REQUEST');
+      log('Method: ${request.method}');
+      log('URL: ${request.url}');
       log('Headers: ${request.headers}');
+      log('═══════════════════════════════════════════════════════════');
       return request;
     });
 
     httpClient.addResponseModifier<Object?>((request, response) {
-      log('Response: ${response.statusCode}, Body: ${response.body}');
+      try {
+        log('═══════════════════════════════════════════════════════════');
+        log('📥 API_RESPONSE');
+        log('Status Code: ${response.statusCode}');
+        log('URL: ${request.url}');
+        
+        // Log response body if it exists
+        if (response.body != null) {
+          try {
+            final bodyStr = response.body is String ? response.body as String : response.body.toString();
+            if (bodyStr.isNotEmpty && bodyStr.length < 200) {
+              try {
+                final decodedBody = jsonDecode(bodyStr);
+                log('Response Body: ${jsonEncode(decodedBody)}');
+              } catch (e) {
+                // If JSON decode fails, just log the raw string (truncated)
+                log('Response Body: ${bodyStr.substring(0, min(bodyStr.length, 100))}...');
+              }
+            } else if (bodyStr.isNotEmpty) {
+              log('Response Body: ${bodyStr.substring(0, min(bodyStr.length, 150))}...');
+            } else {
+              log('Response Body: Empty string');
+            }
+          } catch (e) {
+            log('Response Body: Cannot log - ${e.toString()}');
+          }
+        } else {
+          log('Response Body: null');
+        }
+        log('═══════════════════════════════════════════════════════════');
+      } catch (e) {
+        log('⚠️ Error in response modifier: ${e.toString()}');
+      }
       return response;
     });
   }
 
   Future<Either<CustomError, T>> _convert<T>(
       Response response, T Function(Map<String, dynamic>) fromJson) async {
-    if (response.statusCode == 200) {
+    final statusCode = response.statusCode ?? 0;
+    
+    // Accept all 2xx success codes (200-299)
+    if (statusCode >= 200 && statusCode < 300) {
       try {
-        return Right(fromJson(response.body));
-      } catch (e) {
-        return Left(
-            CustomError(response.statusCode, message: 'Parsing error: \$e'));
+        log('✅ API_SUCCESS: Parsing response for status $statusCode');
+        // Handle both Map and String responses
+        final body = response.body is Map ? response.body : (response.body ?? {});
+        return Right(fromJson(body is String ? jsonDecode(body) : body));
+      } catch (e, stackTrace) {
+        log('❌ API_PARSE_ERROR: $e');
+        log('Stack: $stackTrace');
+        return Left(CustomError(statusCode, message: 'Parsing error: $e'));
       }
     } else {
+      log('❌ API_ERROR: Status $statusCode');
+      log('Error Message: ${response.statusText}');
+      log('Response Body: ${response.body}');
       return Left(
-          CustomError(response.statusCode, message: '\${response.statusText}'));
+          CustomError(statusCode, message: '${response.statusText}'));
+    }
+  }
+
+  /// Wrapper to catch all network exceptions including SocketException, TimeoutException, etc.
+  /// This method wraps the API call and delegates response handling to the provided handler
+  Future<Either<CustomError, T>> _safeApiCall<T>(
+    Future<Response> Function() apiCall,
+    Future<Either<CustomError, T>> Function(Response response) handler,
+  ) async {
+    try {
+      log('📡 Executing API call...');
+      
+      // Wrap the call with a timeout to catch hanging requests
+      final response = await apiCall().timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          log('❌ REQUEST_TIMEOUT: API call exceeded 30 seconds');
+          throw TimeoutException('API request timeout after 30 seconds');
+        },
+      );
+      
+      log('✅ API call completed');
+      log('   Status: ${response.statusCode}');
+      log('   Body length: ${response.body?.toString().length ?? 0}');
+      
+      // Validate response object integrity
+      if (response.statusCode == null && response.body == null) {
+        log('⚠️ RESPONSE_INVALID: Both statusCode and body are null');
+        log('   Response type: ${response.runtimeType}');
+        log('   Response toString: ${response.toString()}');
+        log('   This typically means the server closed the connection without sending data');
+        return Left(CustomError(-1, message: 'Server did not send a valid response'));
+      }
+      
+      // Handle null statusCode (can occur with incomplete responses or connection issues)
+      if (response.statusCode == null) {
+        log('⚠️ STATUS_CODE_NULL: Status code is null but body exists');
+        log('   Response body: ${response.body}');
+        return Left(CustomError(-1, message: 'Invalid response status from server'));
+      }
+      
+      return await handler(response);
+    } on SocketException catch (e) {
+      log('❌ SOCKET_EXCEPTION: ${e.message}');
+      log('   Stack: ${e.toString()}');
+      return Left(CustomError(-1, message: 'Connection error: ${e.message}'));
+    } on TimeoutException catch (e) {
+      log('❌ TIMEOUT_EXCEPTION: ${e.message}');
+      log('   Stack: ${e.toString()}');
+      return Left(CustomError(-1, message: 'Request timeout'));
+    } catch (e, stackTrace) {
+      log('❌ UNKNOWN_EXCEPTION: $e');
+      log('   Stack: $stackTrace');
+      return Left(CustomError(-1, message: 'Unexpected error: $e'));
     }
   }
 
   @override
   Future<Either<CustomError, LoginResponseModel>> login(
       LoginRequestModel payload) async {
-    final response = await post('users/login', payload.toJson());
-    return _convert(response, LoginResponseModel.fromJson);
+    return _safeApiCall(
+      () => post('users/login', payload.toJson()),
+      (response) => _convert(response, LoginResponseModel.fromJson),
+    );
   }
 
   @override
   Future<Either<CustomError, Response>> register(
       RegisterRequestModel register) async {
-    final response = await post('users', register.toJson());
-    return response.statusCode == 200
-        ? Right(response)
-        : Left(CustomError(response.statusCode,
-            message: response.statusText ?? ''));
+    return _safeApiCall(
+      () => post('users/register', register.toJson()),
+      (response) async {
+        final statusCode = response.statusCode ?? 0;
+        // Accept all 2xx success codes (200-299)
+        if (statusCode >= 200 && statusCode < 300) {
+          return Right(response);
+        } else {
+          return Left(CustomError(statusCode,
+              message: response.statusText ?? 'Registration failed'));
+        }
+      },
+    );
   }
 
   @override
@@ -166,7 +280,7 @@ Future<Either<CustomError, List<SalafQuoteModel>>> fetchSalafQuotes() async {
     }
   }
  Future<Either<CustomError, List<DuaModel>>> fetchDua() async {
-  final response = await get('ajkerduas/list');
+  final response = await get('ajkerduas');
 
   if (response.statusCode == 200 && response.body['success'] == true) {
     final List<dynamic> data = response.body['data'];
@@ -257,7 +371,12 @@ Future<Either<CustomError, List<TrackingOption>>> fetchTrackingOptions(String sl
       response.body['data'].isNotEmpty) {
     try {
       List<dynamic> rawOptions = response.body['data'][0]['options'];
-      rawOptions.sort((a, b) => a["index"].compareTo(b["index"]));
+      // Convert index to int for sorting
+      rawOptions.sort((a, b) {
+        final aIndex = int.parse(a["index"].toString());
+        final bIndex = int.parse(b["index"].toString());
+        return aIndex.compareTo(bIndex);
+      });
       final options = rawOptions.map((e) => TrackingOption.fromJson(e)).toList();
       return Right(options);
     } catch (e) {
@@ -370,7 +489,7 @@ Future<Either<CustomError, List<TrackingOption>>> fetchTrackingOptions(String sl
       int rank = 0;
       int points = 0;
       for (int i = 0; i < userList.length; i++) {
-        if (userList[i]["user"]["_id"] == userId) {
+        if (userList[i]["_id"] == userId) {
           rank = i + 1;
           points = userList[i]["totalPoints"] ?? 0;
           break;

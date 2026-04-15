@@ -29,7 +29,7 @@ class LoginView extends GetView<LoginController> {
                   decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(15.3.r)),
-                  child: Image.asset("images/amal_tracker.png")),
+                  child: Image.asset("images/icon.png")),
               SizedBox(height: 20.h),
               CustomTextField(
                 controller: controller.identifierController,

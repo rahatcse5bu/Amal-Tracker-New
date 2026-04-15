@@ -23,10 +23,15 @@ import '../../modules/tracking_overview/view/tracking_overview_view.dart';
 import '../../modules/tracking_overview/binding/tracking_overview_binding.dart';
 import '../../modules/prayer_times/view/prayer_times_view.dart';
 import '../../modules/prayer_times/binding/prayer_times_binding.dart';
+import '../../modules/amal/binding/amal_binding.dart';
+import '../../modules/amal/view/amal_view.dart';
+import '../../modules/adhkar/binding/adhkar_binding.dart';
+import '../../modules/adhkar/view/adhkar_view.dart';
 import '../../splash.dart';
 
 class Routes {
   static const splash = '/splash';
+  static const main = '/main'; // Main navigation with bottom nav bar
   static const home = '/home';
   static const register = '/register';
   static const login = '/login';
@@ -41,6 +46,8 @@ class Routes {
   static const koroniyo = '/koroniyo';
   static const duaList = '/duaList';
   static const prayerTimes = '/prayer-times';
+  static const amal = '/amal';
+  static const adhkar = '/adhkar';
 
   // Dynamic route generator for single task
   // static String singleTask(String id) => '/task/$id';
@@ -53,6 +60,11 @@ class AppPages {
     GetPage(
       name: Routes.splash,
       page: () => const SplashScreen(),
+    ),
+    GetPage(
+      name: Routes.main,
+      page: () => MainView(),
+      binding: MainViewBinding(),
     ),
     GetPage(
       name: Routes.home,
@@ -111,6 +123,16 @@ class AppPages {
       name: Routes.prayerTimes,
       page: () => const PrayerTimesView(),
       binding: PrayerTimesBinding(),
+    ),
+    GetPage(
+      name: Routes.amal,
+      page: () => const AmalView(),
+      binding: AmalBinding(),
+    ),
+    GetPage(
+      name: Routes.adhkar,
+      page: () => const AdhkarView(),
+      binding: AdhkarBinding(),
     ),
   ];
 }

@@ -6,6 +6,8 @@ import 'dart:convert';
 
 import 'app/constants/app_color.dart';
 
+const String API_BASE_URL = 'http://10.0.2.2:3000/api/v1';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -24,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final response = await http.post(
       Uri.parse(
-          'https://ramadan-tracker-server.vercel.app/api/v1/users/login'), // Replace with your API endpoint
+          '$API_BASE_URL/users/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -92,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Container(
               color: AppColors.primary,
-              child: Image.asset("images/amal_tracker.png")),
+              child: Image.asset("images/icon.png")),
             TextFormField(
               controller: _identifierController,
               decoration: InputDecoration(

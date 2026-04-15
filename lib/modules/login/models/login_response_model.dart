@@ -7,10 +7,9 @@ class LoginResponseModel {
   LoginResponseModel({required this.token, required this.userId, required this.userName, required this.fullName});
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
-    final data = json['data'];
-    final user = data['user'];
+    final user = json['user'];
     return LoginResponseModel(
-      token: data['token'],
+      token: json['token'],
       userId: user['_id'],
       userName: user['userName'],
       fullName: user['fullName'],

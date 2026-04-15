@@ -20,9 +20,14 @@ class DuaController extends GetxController {
 
    Future<void> fetchDua() async {
     final result = await _apiHelper.fetchDua();
-    result.fold((error) => null, (dua) => DuaList.value = dua);
-    isLoading.value=false;
-    log("ajker ayat: " + DuaList.first.arabic);
+    result.fold(
+      (error) => log('Error fetching Dua: ${error.message}'),
+      (dua) => DuaList.value = dua
+    );
+    isLoading.value = false;
+    if (DuaList.isNotEmpty) {
+      log("ajker dua: " + DuaList.first.arabic ?? 'N/A');
+    }
   }
 
 }

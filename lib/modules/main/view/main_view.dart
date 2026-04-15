@@ -6,11 +6,11 @@ import 'package:get/get.dart';
 import '../../../app/common/controller/nav_controller.dart';
 import '../../../app/common/widgets/custom_appbar_widget.dart';
 import '../../../app/constants/app_color.dart';
-import '../../../app/routes/app_pages.dart';
 import '../../../app/translation/translation_keys.dart';
 import '../../dashboard/controller/dashboard_controller.dart';
-import '../../dashboard/view/dashboard_view.dart';
 import '../../dashboard/widgets/leaderboard_widget.dart';
+import '../../../modules/home/view/home_view.dart';
+import '../../amal/view/amal_view.dart';
 import '../controller/main_controller.dart';
 
 class MainView extends StatelessWidget {
@@ -28,49 +28,93 @@ class MainView extends StatelessWidget {
       body: Obx(() {
         switch (controller.currentIndex.value) {
           case 0:
-            return DashboardView();
+            return const HomeView();
           case 1:
             return LeaderboardWidget(
               isLeaderboardPage: true,
             );
           case 2:
+            return const AmalView();
+          case 3:
             return Wrap();
 
           default:
-            return DashboardView();
+            return const HomeView();
         }
       }),
       bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          // iconSize: 16.sp,
-          // unselectedLabelStyle: TextStyle(fontSize: 11.sp),
-          backgroundColor: Colors.white,
-          currentIndex: controller.currentIndex.value,
-          showSelectedLabels: true,
-          // onTap: controller.changeTab,
-          onTap: (index) {
-            if (index == 2) {
-              mainController.openMoreBottomSheet();
-            } else {
-              controller.changeTab(index);
-            }
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: TranslationKeys.home.tr,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.leaderboard),
-              label: TranslationKeys.leaderBoard.tr,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.more_horiz),
-              label: TranslationKeys.more.tr,
-            ),
-          ],
-          selectedItemColor: AppColors.primary,
-          unselectedItemColor: Colors.grey,
+        () => Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 12,
+                offset: const Offset(0, -3),
+              ),
+            ],
+          ),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.white,
+            currentIndex: controller.currentIndex.value,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            elevation: 0,
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) {
+              if (index == 3) {
+                mainController.openMoreBottomSheet();
+              } else {
+                controller.changeTab(index);
+              }
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4.h),
+                  child: Icon(
+                    Icons.home_filled,
+                    size: 24.sp,
+                  ),
+                ),
+                label: TranslationKeys.home.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4.h),
+                  child: Icon(
+                    Icons.emoji_events,
+                    size: 24.sp,
+                  ),
+                ),
+                label: TranslationKeys.leaderBoard.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4.h),
+                  child: Icon(
+                    Icons.quiz_rounded,
+                    size: 24.sp,
+                  ),
+                ),
+                label: 'আমাল',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4.h),
+                  child: Icon(
+                    Icons.more_horiz_rounded,
+                    size: 24.sp,
+                  ),
+                ),
+                label: TranslationKeys.more.tr,
+              ),
+            ],
+            selectedItemColor: AppColors.primary,
+            unselectedItemColor: Colors.grey[400],
+            selectedFontSize: 12.sp,
+            unselectedFontSize: 11.sp,
+            iconSize: 24.sp,
+          ),
         ),
       ),
     );

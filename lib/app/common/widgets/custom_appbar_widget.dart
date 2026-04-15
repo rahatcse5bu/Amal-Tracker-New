@@ -35,178 +35,181 @@ class CustomAppBar {
 
     return AppBar(
       scrolledUnderElevation: 0,
-      leadingWidth: leadingWidth ?? 180,
-      title: Obx(() => dashboardController.isLoading.value
-          ? CupertinoActivityIndicator(
-              color: AppColors.primary,
-            )
-          : Text("${dashboardController.totalPoints.value} pts",
-              style: TextStyle(fontSize: 10.sp, color: Colors.white))),
-      centerTitle: centerTitle,
+      leadingWidth: 60.w,
+      elevation: 2,
+      toolbarHeight: 70.h,
       backgroundColor: backgroundColor ?? AppColors.primary,
-      automaticallyImplyLeading: true,
-      actions: actions ??
-          <Widget>[
-            // In your settings screen/widget
-            Obx(
-              () {
-                final languageController = Get.find<LanguageController>();
-
-                return DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: languageController.appLocale?.languageCode ?? 'en',
-                    // icon: Icon(Icons.language, color: Colors.white),
-                    // isExpanded: true,
-                    dropdownColor: AppColors.primary,
-
-                    borderRadius: BorderRadius.circular(12.r),
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        languageController.changeLanguage(
-                          newValue,
-                          newValue == 'bn' ? 'BD' : 'US',
-                        );
-                      }
-                    },
-                    items: [
-                      DropdownMenuItem(
-                        value: 'en',
-                        child: Row(
-                          children: [
-                            Text('🇺🇸'), // Optional flag icon
-                            SizedBox(width: 5.w),
-                            Text(
-                              'English',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 11.sp),
-                            ),
-                          ],
-                        ),
+      automaticallyImplyLeading: false,
+      leading: leadingIcon != null
+          ? IconButton(
+              icon: Icon(leadingIcon, color: Colors.white, size: 24.sp),
+              onPressed: onLeadingPressed ?? () => Get.back(),
+            )
+          : null,
+      title: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.w),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Points Display (Left-Center)
+            Expanded(
+              child: Obx(() => dashboardController.isLoading.value
+                  ? CupertinoActivityIndicator(color: Colors.white)
+                  : Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(20.r),
                       ),
-                      DropdownMenuItem(
-                        value: 'bn',
-                        child: Row(
-                          children: [
-                            Text('🇧🇩'), // Optional flag icon
-                            SizedBox(width: 5.w),
-                            Text(
-                              'বাংলা',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 11.sp),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.star, color: Colors.amber, size: 18.sp),
+                          SizedBox(width: 6.w),
+                          Text(
+                            "${dashboardController.totalPoints.value}",
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
-                          ],
-                        ),
+                          ),
+                          Text(
+                            " pts",
+                            style: TextStyle(
+                              fontSize: 11.sp,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              },
+                    )),
             ),
-            PopupMenuButton(
-              color: Colors.white,
-              icon: Icon(
-                Icons.more_vert,
-                color: Colors
-                    .white, // Change the color of the vertical three dots here
-              ),
-              itemBuilder: (BuildContext context) {
-                return [
-                  // Language Selection Items
-                  // PopupMenuItem(
-                  //   child: GetBuilder<LanguageController>(
-                  //     builder: (controller) {
-                  //       return Column(
-                  //         children: [
-                  //           _buildLanguageItem(context,
-                  //               languageCode: 'en', label: 'English'),
-                  //           _buildLanguageItem(context,
-                  //               languageCode: 'bn', label: 'বাংলা'),
-                  //         ],
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
-                  PopupMenuItem(
-                    child: Column(
+            SizedBox(width: 12.w),
+            // Rank Display (Center-Right)
+            Obx(() => dashboardController.isLoading.value
+                ? Container()
+                : Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("${dashboardController.username.value}"),
-                        SizedBox(height: 10.h),
-                        Divider(
-                          color: AppColors.primary,
-                          height: 1,
-                          endIndent: 5.w,
-                          indent: 5.w,
+                        Icon(Icons.emoji_events,
+                            color: Colors.amber, size: 16.sp),
+                        SizedBox(width: 4.w),
+                        Text(
+                          "${dashboardController.userRank.value}${Utils.getNumberSuffix(dashboardController.userRank.value)}",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
                         ),
-                        SizedBox(height: 10.h),
-                        InkWell(
-                            onTap: () async {
-// Ensure the LocalStorage is ready before setting items
-                              StorageHelper.removeLanguageSettings();
-
-                              StorageHelper.removeToken();
-                              StorageHelper.removeFullName();
-                              StorageHelper.removeUserData();
-                              StorageHelper.removeUserId();
-                              StorageHelper.removeUserName();
-                              Get.delete<DashboardController>(force: true);
-                              Get.delete<UserPointsController>(force: true);
-                              Get.delete<RamadanPlannerController>(force: true);
-                              Get.delete<TrackingController>(force: true);
-                              Get.delete<QuickJumpSectionController>(
-                                  force: true);
-
-                              // Redirect to login page
-                              Get.toNamed(Routes.login);
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.logout,
-                                  color: Colors.redAccent,
-                                ),
-                                SizedBox(width: 5.h),
-                                Text('Logout'),
-                              ],
-                            )),
-                        SizedBox(height: 6.h),
                       ],
                     ),
-                  ),
-                ];
-              },
-            ),
+                  )),
           ],
-      leading: Row(
-        children: [
-          leadingWidget != null
-              ? Expanded(
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () {
-                      Get.back();
-                    },
-                  ),
-                )
-              : Container(
-                  child: SizedBox(
-                    width: 15.w,
-                  ),
-                ),
-          Obx(() => dashboardController.isLoading.value
-              ? CupertinoActivityIndicator(
-                  color: AppColors.primary,
-                )
-              : Text(
-                "${TranslationKeys.rank.tr}:${dashboardController.userRank.value}${Utils.getNumberSuffix(dashboardController.userRank.value)}",
-                style: TextStyle(fontSize: 12.sp, color: Colors.white),
-              )),
-        ],
+        ),
       ),
+      actions: [
+        // Language Dropdown
+        Obx(() {
+          final languageController = Get.find<LanguageController>();
+          return DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: languageController.appLocale?.languageCode ?? 'en',
+              dropdownColor: AppColors.primary,
+              borderRadius: BorderRadius.circular(12.r),
+              style: TextStyle(fontSize: 11.sp, color: Colors.white),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  languageController.changeLanguage(
+                    newValue,
+                    newValue == 'bn' ? 'BD' : 'US',
+                  );
+                }
+              },
+              items: [
+                DropdownMenuItem(
+                  value: 'en',
+                  child: Text('🇺🇸 EN'),
+                ),
+                DropdownMenuItem(
+                  value: 'bn',
+                  child: Text('🇧🇩 BN'),
+                ),
+              ],
+            ),
+          );
+        }),
+        // More Menu
+        PopupMenuButton(
+          color: Colors.white,
+          icon: Icon(Icons.more_vert, color: Colors.white, size: 22.sp),
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Obx(() => Text(
+                          "${dashboardController.username.value}",
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )),
+                    SizedBox(height: 10.h),
+                    Divider(
+                      color: AppColors.primary.withOpacity(0.2),
+                      height: 1,
+                    ),
+                    SizedBox(height: 10.h),
+                    InkWell(
+                      onTap: () async {
+                        StorageHelper.removeLanguageSettings();
+                        StorageHelper.removeToken();
+                        StorageHelper.removeFullName();
+                        StorageHelper.removeUserData();
+                        StorageHelper.removeUserId();
+                        StorageHelper.removeUserName();
+                        Get.delete<DashboardController>(force: true);
+                        Get.delete<UserPointsController>(force: true);
+                        Get.delete<RamadanPlannerController>(force: true);
+                        Get.delete<TrackingController>(force: true);
+                        Get.delete<QuickJumpSectionController>(force: true);
+                        Get.toNamed(Routes.login);
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.logout,
+                              color: Colors.redAccent, size: 18.sp),
+                          SizedBox(width: 8.w),
+                          Text(
+                            'Logout',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                  ],
+                ),
+              ),
+            ];
+          },
+        ),
+        SizedBox(width: 8.w),
+      ],
     );
   }
 }

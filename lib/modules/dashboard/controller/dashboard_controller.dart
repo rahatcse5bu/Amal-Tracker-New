@@ -52,21 +52,42 @@ username.value=await Utils. getUserName()??'';
 
   Future<void> fetchAjkerAyat() async {
     final result = await _apiHelper.fetchAyat();
-    result.fold((error) => null, (ayat) => AyatList.value = ayat);
-    log("ajker ayat: " + AyatList.first.enText);
+    result.fold(
+      (error) => null,
+      (ayat) {
+        AyatList.value = ayat;
+        if (AyatList.isNotEmpty) {
+          log("ajker ayat: " + AyatList.first.enText);
+        }
+      },
+    );
   }
 
   Future<void> fetchAjkerHadith() async {
     final result = await _apiHelper.fetchAjkerHadith();
-    result.fold((error) => null, (hadith) => HadithList.value = hadith);
-    log("ajker ayat: " + HadithList.value.first.enText);
+    result.fold(
+      (error) => null,
+      (hadith) {
+        HadithList.value = hadith;
+        if (HadithList.isNotEmpty) {
+          log("ajker hadith: " + HadithList.first.enText);
+        }
+      },
+    );
   }
 
   Future<void> fetchAjkerSalafQuote() async {
     final result = await _apiHelper.fetchSalafQuotes();
-    result.fold((error) => null, (quote) => salafQuotes.value = quote);
-    log("ajker ayat: " + salafQuotes.first.bnText);
-    log("ajker ayat: " + salafQuotes.first.enText);
+    result.fold(
+      (error) => null,
+      (quote) {
+        salafQuotes.value = quote;
+        if (salafQuotes.isNotEmpty) {
+          log("ajker quote: " + salafQuotes.first.bnText);
+          log("ajker quote: " + salafQuotes.first.enText);
+        }
+      },
+    );
   }
 
   Future<void> fetchUsers() async {
@@ -77,11 +98,12 @@ username.value=await Utils. getUserName()??'';
         final String? currentUser =
             await StorageHelper.getUserName(); // Get logged-in user
         users.value = userList; // Assign full user list
-              // Sort users based on totalPoints (descending - highest points first)
-      users.sort((a, b) => b.totalPoints.compareTo(a.totalPoints));
+        // Sort users based on totalPoints (descending - highest points first)
+        users.sort((a, b) => b.totalPoints.compareTo(a.totalPoints));
 
-
-  log("userrrr: ${users.value.first.fullName}");
+        if (users.isNotEmpty) {
+          log("userrrr: ${users.value.first.fullName}");
+        }
         // Find the logged-in user's totalPoints
         totalPoints.value = userList
             .firstWhere((user) => user.userName == currentUser,

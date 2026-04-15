@@ -1,34 +1,28 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hijri/hijri_calendar.dart';
-import 'package:amal_tracker/InputTracking.dart';
-import 'package:amal_tracker/Tracking-Old.dart';
-import 'package:amal_tracker/login.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:localstorage/localstorage.dart';
 import 'Credit.dart';
 import 'Data/data.dart';
 import 'PlannerController.dart';
-import 'Tracking.dart';
 import 'colors.dart';
-
-import 'main.dart';
-import 'widgets/Evening_Todo.dart';
-import 'widgets/General_Todo.dart';
+import 'Tracking-Old.dart';
+import 'login.dart';
 import 'widgets/Good_Afternoon_Todo.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:localstorage/localstorage.dart';
+const String API_BASE_URL = 'http://10.0.2.2:3000/api/v1';
 
 class RamadanPlanner extends StatefulWidget {
   RamadanPlanner({super.key, required this.ramadan_day});
     final GlobalKey<_RamadanPlannerState> plannerKey = GlobalKey();
     
-  int ramadan_day;
+  final int ramadan_day;
+  @override
   State<RamadanPlanner> createState() => _RamadanPlannerState();
 }
 
@@ -37,7 +31,6 @@ class _RamadanPlannerState extends State<RamadanPlanner> {
   var current_month = HijriCalendar.now().getLongMonthName();
   var current_date = HijriCalendar.now().hDay;
   var current_year = HijriCalendar.now().hYear;
-  final _random = new Random();
   var todays_point = 0;
   var endName = 0;
   var startName = 0;
@@ -53,7 +46,6 @@ class _RamadanPlannerState extends State<RamadanPlanner> {
   bool isLoadingDua = true;
   bool isLoadingAyat = true;
   bool isLoadingPoint = true;
-  Timer? _timer;
   final LocalStorage storage = LocalStorage('amal_tracker');
   final PlannerController plannerController = Get.put(PlannerController());
 
@@ -86,7 +78,7 @@ class _RamadanPlannerState extends State<RamadanPlanner> {
 
   Future<void> fetchAjkerHadith() async {
     final response = await http.get(Uri.parse(
-        'https://ramadan-tracker-server.vercel.app/api/v1/ajkerhadiths'));
+        '$API_BASE_URL/ajkerhadiths'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data["success"]) {
@@ -100,7 +92,7 @@ class _RamadanPlannerState extends State<RamadanPlanner> {
 
   Future<void> fetchAjkerAyat() async {
     final response = await http.get(Uri.parse(
-        'https://ramadan-tracker-server.vercel.app/api/v1/ajkerqurans'));
+        '$API_BASE_URL/ajkerqurans'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data["success"]) {
@@ -114,7 +106,7 @@ class _RamadanPlannerState extends State<RamadanPlanner> {
 
   Future<void> fetchAjkerDua() async {
     final response = await http.get(Uri.parse(
-        'https://ramadan-tracker-server.vercel.app/api/v1/ajkerduas'));
+        '$API_BASE_URL/ajkerduas'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data["success"]) {
@@ -133,7 +125,7 @@ class _RamadanPlannerState extends State<RamadanPlanner> {
     await storage.ready;
     var user_id = storage.getItem('_id');
     final Uri apiUri = Uri.parse(
-        'https://ramadan-tracker-server.vercel.app/api/v1/users/add-values/$user_id');
+        '$API_BASE_URL/users/add-values/$user_id');
     final response = await http.post(
       apiUri,
       headers: <String, String>{
@@ -179,7 +171,6 @@ class _RamadanPlannerState extends State<RamadanPlanner> {
 
   @override
   Widget build(BuildContext context) {
-    var yearAH;
     return Scaffold(
       appBar: AppBar(
         leading: Container(

@@ -9,6 +9,8 @@ import 'package:amal_tracker/planner.dart';
 import 'PlannerController.dart';
 import 'colors.dart';
 
+const String API_BASE_URL = 'http://10.0.2.2:3000/api/v1';
+
 class TrackingOld extends StatefulWidget {
   final int ramadan_day;
   final String slug;
@@ -35,7 +37,7 @@ class _TrackingOldState extends State<TrackingOld> {
   Future<List<dynamic>> fetchTrackingOptions() async {
     final response = await http.get(
       Uri.parse(
-          'https://ramadan-tracker-server.vercel.app/api/v1/trackings/slug/' +
+          '$API_BASE_URL/trackings/slug/' +
               widget.slug.toString()),
     );
     if (response.statusCode == 200) {
@@ -44,7 +46,11 @@ class _TrackingOldState extends State<TrackingOld> {
         // Assuming 'data' always contains at least one element and we're interested in the 'options' of the first one.
         // Sort the options by their index before returning
         List<dynamic> options = data["data"][0]["options"];
-        options.sort((a, b) => a["index"].compareTo(b["index"]));
+        options.sort((a, b) {
+          final aIndex = int.parse(a["index"].toString());
+          final bIndex = int.parse(b["index"].toString());
+          return aIndex.compareTo(bIndex);
+        });
         // After successfully fetching the options, initialize loading states:
         for (var option in options) {
           loadingStates[option['_id']] =
@@ -64,7 +70,7 @@ class _TrackingOldState extends State<TrackingOld> {
   Future<void> addPoints(int points) async {
     final userId = await storage.getItem('_id');
     final Uri url = Uri.parse(
-        'https://ramadan-tracker-server.vercel.app/api/v1/users/points/$userId/');
+        '$API_BASE_URL/users/points/$userId/');
     try {
       final response = await http.patch(
         url,
@@ -101,7 +107,7 @@ class _TrackingOldState extends State<TrackingOld> {
     });
     final response = await http.patch(
       Uri.parse(
-          'https://ramadan-tracker-server.vercel.app/api/v1/trackings/add-user-to-tracking/' +
+          '$API_BASE_URL/trackings/add-user-to-tracking/' +
               widget.slug.toString() +
               '/$optionId'),
       headers: <String, String>{
@@ -137,7 +143,7 @@ class _TrackingOldState extends State<TrackingOld> {
     await storage.ready;
     String user_id = storage.getItem('_id');
     final response = await http.get(Uri.parse(
-        'https://ramadan-tracker-server.vercel.app/api/v1/users/points/' +
+        '$API_BASE_URL/users/points/' +
             user_id.toString() +
             '/day' +
             widget.ramadan_day.toString()));

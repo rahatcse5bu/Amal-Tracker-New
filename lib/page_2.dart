@@ -6,6 +6,8 @@ import 'package:amal_tracker/colors.dart';
 import 'package:amal_tracker/login.dart';
 import 'package:amal_tracker/main.dart';
 
+const String API_BASE_URL = 'http://10.0.2.2:3000/api/v1';
+
 class Borjoniyo extends StatefulWidget {
   const Borjoniyo({super.key});
 
@@ -24,7 +26,7 @@ class _BorjoniyoState extends State<Borjoniyo> {
 
   Future<List<dynamic>> fetchBorjoniyo() async {
     final response = await http.get(Uri.parse(
-        'https://ramadan-tracker-server.vercel.app/api/v1/borjoniyos'));
+        '$API_BASE_URL/borjoniyos'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

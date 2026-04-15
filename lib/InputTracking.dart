@@ -6,6 +6,8 @@ import 'package:localstorage/localstorage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'colors.dart'; // Ensure you have this file in your project
 
+const String API_BASE_URL = 'http://10.0.2.2:3000/api/v1';
+
 class InputTracking extends StatefulWidget {
   final int ramadan_day;
 
@@ -43,7 +45,7 @@ String generateUniqueId() {
 }
 Future<void> fetchTrackingOptions(List<dynamic> dayValues) async {
   final response = await http.get(
-    Uri.parse('https://ramadan-tracker-server.vercel.app/api/v1/trackings/slug/afternoon_tracking'),
+    Uri.parse('$API_BASE_URL/trackings/slug/afternoon_tracking'),
   );
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
@@ -70,7 +72,7 @@ Future<Map<String, dynamic>> fetchUserDetails() async {
   String userId = storage.getItem('_id');
 
   final response = await http.get(
-    Uri.parse('https://ramadan-tracker-server.vercel.app/api/v1/users/$userId'),
+    Uri.parse('$API_BASE_URL/users/$userId'),
   );
 
   if (response.statusCode == 200) {
@@ -83,7 +85,7 @@ Future<Map<String, dynamic>> fetchUserDetails() async {
 }
 Future<void> updateSpecialObtains({required String userId, required String day, required String value, required String id}) async {
   final response = await http.patch(
-    Uri.parse('https://ramadan-tracker-server.vercel.app/api/v1/users/add-special-obtains/$userId'),
+    Uri.parse('$API_BASE_URL/users/add-special-obtains/$userId'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

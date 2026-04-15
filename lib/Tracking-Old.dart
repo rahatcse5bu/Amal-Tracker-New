@@ -9,6 +9,8 @@ import 'package:amal_tracker/planner.dart';
 import 'PlannerController.dart';
 import 'colors.dart';
 
+const String API_BASE_URL = 'http://10.0.2.2:3000/api/v1';
+
 class Tracking extends StatefulWidget {
   final int ramadan_day;
   final String slug;
@@ -35,7 +37,7 @@ class _TrackingState extends State<Tracking> {
   Future<List<dynamic>> fetchTrackingOptions() async {
     final response = await http.get(
       Uri.parse(
-          'https://ramadan-tracker-server.vercel.app/api/v1/trackings/slug/' +
+          '$API_BASE_URL/trackings/slug/' +
               widget.slug.toString()),
     );
     if (response.statusCode == 200) {
@@ -64,7 +66,7 @@ class _TrackingState extends State<Tracking> {
   Future<void> addPoints(int points) async {
     final userId = await storage.getItem('_id');
     final Uri url = Uri.parse(
-        'https://ramadan-tracker-server.vercel.app/api/v1/users/points/$userId/');
+        '$API_BASE_URL/users/points/$userId/');
     try {
       final response = await http.patch(
         url,
@@ -101,7 +103,7 @@ class _TrackingState extends State<Tracking> {
     });
     final response = await http.patch(
       Uri.parse(
-          'https://ramadan-tracker-server.vercel.app/api/v1/trackings/add-user-to-tracking/' +
+          '$API_BASE_URL/trackings/add-user-to-tracking/' +
               widget.slug.toString() +
               '/$optionId'),
       headers: <String, String>{
@@ -137,7 +139,7 @@ class _TrackingState extends State<Tracking> {
     await storage.ready;
     String user_id = storage.getItem('_id');
     final response = await http.get(Uri.parse(
-        'https://ramadan-tracker-server.vercel.app/api/v1/users/points/' +
+        '$API_BASE_URL/users/points/' +
             user_id.toString() +
             '/day' +
             widget.ramadan_day.toString()));

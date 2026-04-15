@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:amal_tracker/modules/dus-list/models/dua_model.dart';
 import '../../../app/common/widgets/custom_appbar_widget.dart';
 import '../../../app/constants/app_color.dart';
 import '../controller/dua_controller.dart';
@@ -13,66 +12,128 @@ class DuaView extends GetView<DuaController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.appBar(title: 'আজকের দোয়া', leadingWidget: Icon(Icons.arrow_back,color: Colors.white,),leadingWidth: 90.w, onLeadingPressed: ()=>
-        Get.back()
+      appBar: CustomAppBar.appBar(
+        title: 'Duas',
+        centerTitle: true,
+        leadingIcon: Icons.arrow_back,
+        onLeadingPressed: () => Get.back(),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child:
-        Column(
+      body: SafeArea(
+        child: Column(
           children: [
-                  SizedBox(
-                height: 10.h,
+            // Header Card
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.primary,
+                    AppColors.primary.withOpacity(0.7),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(16.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withOpacity(0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-              Card(
-                color: Colors.white,
-                elevation: 5,
-                child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(12.w),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                      size: 28.sp,
+                    ),
+                  ),
+                  SizedBox(width: 14.w),
+                  Expanded(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          margin: const EdgeInsets.only(bottom: 5),
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(6),
-                                topRight: Radius.circular(6)),
-                            color: AppColors.primary,
+                        Text(
+                          "দু'আ সমূহ",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          child: Center(
-                            child: Text(
-                              // '${TranslationKeys.ramadaneKoroniyo.tr}',
-                              "দু'আ সমুহ",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
+                        ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          "Duas for Ramadan",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.white.withOpacity(0.8),
                           ),
                         ),
                       ],
-                    )),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 10.h,
+            ),
+            SizedBox(height: 8.h),
+            // List
+            Expanded(
+              child: Obx(
+                () => controller.isLoading.value
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
+                      )
+                    : controller.DuaList.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.mood,
+                                  size: 64.sp,
+                                  color: Colors.grey[300],
+                                ),
+                                SizedBox(height: 16.h),
+                                Text(
+                                  "No Duas Found",
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : ListView.builder(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 8.h,
+                            ),
+                            itemCount: controller.DuaList.length,
+                            itemBuilder: (context, index) {
+                              final dua = controller.DuaList[index];
+                              return DuaCardWidget(
+                                dua: dua,
+                              );
+                            },
+                          ),
               ),
-           Obx(()=> Expanded(
-              child: ListView.builder(
-                itemCount: controller.DuaList.length,
-                itemBuilder: (context, index) {
-                 DuaModel dua= controller.DuaList[index];
-                return DuaCardWidget(dua: dua);
-              },),
-            ),)
+            ),
           ],
-        )
-        //  DuaCardWidget(),
+        ),
       ),
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
     );
   }
 }

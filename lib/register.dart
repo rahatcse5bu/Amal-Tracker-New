@@ -5,6 +5,8 @@ import 'dart:convert';
 
 import 'package:amal_tracker/colors.dart';
 
+const String API_BASE_URL = 'http://10.0.2.2:3000/api/v1';
+
 class RegisterScreen extends StatefulWidget {
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -23,8 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     final response = await http.post(
-      Uri.parse(
-          'https://ramadan-tracker-server.vercel.app/api/v1/users'), // Replace with your API endpoint
+      Uri.parse('$API_BASE_URL/users'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

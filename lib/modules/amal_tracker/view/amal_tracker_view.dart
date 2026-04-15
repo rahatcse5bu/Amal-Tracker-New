@@ -14,12 +14,14 @@ class RamadanPlannerView extends StatelessWidget {
     final title = arguments['title'];
 
     return Scaffold(
-      appBar: CustomAppBar.appBar(title: title, centerTitle: true),
-      // AppBar(
-      //   title: Text(title),
-
-      //   backgroundColor: AppColors.primary,
-      // ),
+      appBar: CustomAppBar.appBar(
+        title: title,
+        centerTitle: true,
+        leadingIcon: Icons.arrow_back,
+        onLeadingPressed: () {
+          Get.back();
+        },
+      ),
       body: SingleChildScrollView(
         child: AmalTracker(
           ramadan_day: DateTime.now().day, // Example: Current day

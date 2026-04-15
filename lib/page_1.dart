@@ -6,6 +6,8 @@ import 'package:amal_tracker/colors.dart';
 
 import 'page_2.dart';
 
+const String API_BASE_URL = 'http://10.0.2.2:3000/api/v1';
+
 class Koroniyo extends StatefulWidget {
   const Koroniyo({super.key});
 
@@ -24,7 +26,7 @@ class _KoroniyoState extends State<Koroniyo> {
 
   Future<List<dynamic>> fetchKoroniyo() async {
     final response = await http.get(Uri.parse(
-        'https://ramadan-tracker-server.vercel.app/api/v1/koroniyos'));
+        '$API_BASE_URL/koroniyos'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

@@ -5,11 +5,8 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import '../colors.dart';
-import '../Data/data.dart';
-//import firebase core and firestore
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Data/localStorageFunc.dart';
+
+const String API_BASE_URL = 'http://10.0.2.2:3000/api/v1';
 
 // class Night_Todo extends StatefulWidget {
 //   Night_Todo({super.key, required this.ramadan_day});
@@ -168,7 +165,7 @@ class _NightTrackingPageState extends State<NightTrackingPage> {
   Future<List<dynamic>>? trackingOptionsFuture;
 Future<List<dynamic>> fetchTrackingOptions() async {
   final response = await http.get(
-    Uri.parse('https://ramadan-tracker-server.vercel.app/api/v1/trackings/slug/night_tracking'),
+    Uri.parse('$API_BASE_URL/trackings/slug/night_tracking'),
   );
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
@@ -190,7 +187,7 @@ Future<List<dynamic>> fetchTrackingOptions() async {
     print("Updating option $optionId for user $userId to $isChecked on $day");
 
     final response = await http.patch(
-      Uri.parse('https://ramadan-tracker-server.vercel.app/api/v1/trackings/add-user-to-tracking/night_tracking/$optionId'),
+      Uri.parse('$API_BASE_URL/trackings/add-user-to-tracking/night_tracking/$optionId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

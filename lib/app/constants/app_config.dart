@@ -1,6 +1,7 @@
 class AppConfig {
   // Define your server URLs
-  static const String baseUrl = 'https://amol-tracker-back-end.vercel.app/api/';
+  // For Android emulator: 10.0.2.2, for physical device: your machine IP
+  static const String baseUrl = 'http://10.0.2.2:3000/api/';
   
   // Define app version
   static const String appVersion = '1.0.0';

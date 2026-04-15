@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../app/routes/app_pages.dart';
 import '../../../app/constants/app_color.dart';
@@ -20,319 +21,402 @@ class HomeView extends GetView<HomeController> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: const Color(0xFFF8F9FA),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // Profile Section
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Modern Gradient Header
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      AppColors.primary,
+                      AppColors.primary.withOpacity(0.8),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(24.r),
+                    bottomRight: Radius.circular(24.r),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Assalamu Alaikum',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      'Welcome Back',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-                const CircleAvatar(
-                  radius: 24,
-                  backgroundColor: AppColors.primary,
-                  child: Icon(Icons.person, color: Colors.white),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-
-            // Stats Card
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildStatColumn('Today\'s Points', '120', Icons.star),
-                    _buildStatColumn('Total Tasks', '8', Icons.task_alt),
-                    _buildStatColumn('Completed', '5', Icons.done_all),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Prayer Times Card
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-              child: InkWell(
-                onTap: () => Get.toNamed(Routes.prayerTimes),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Icon(
-                              Icons.mosque_outlined,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Prayer Times',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Obx(() => Text(
-                                  prayerController.currentLocation.value,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                )),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Obx(() => Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.05),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  prayerController.currentPrayer.value,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  prayerController.currentPrayerTime.value,
-                                  style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              'আস্সালামু আলাইকুম',
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white70,
+                              ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Next: ${prayerController.nextPrayer.value}',
-                                  style: TextStyle(
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'in ${prayerController.timeUntilNextPrayer.value}',
-                                  style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ],
+                            SizedBox(height: 4.h),
+                            Text(
+                              'স্বাগতম',
+                              style: TextStyle(
+                                fontSize: 28.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),
-                      )),
-                    ],
-                  ),
+                        Container(
+                          width: 56.w,
+                          height: 56.w,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.2),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.white.withOpacity(0.1),
+                                blurRadius: 8,
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 28.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
 
-            // Daily Inspiration Section
-            const Text(
-              'Daily Inspiration',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            
-            // Quote Widget with cycling quotes
-            InkWell(
-              onTap: controller.cycleQuoteType,
-              child: Obx(() => QuoteWidget(
-                title: controller.currentQuoteType.value == 'hadith' 
-                    ? 'নির্বাচিত হাদিস'
-                    : controller.currentQuoteType.value == 'ayat'
-                        ? 'আজকের আয়াত'
-                        : 'সালাফদের বক্তব্য',
-                text: controller.currentQuote.value,
-                type: controller.currentQuoteType.value,
-              )),
-            ),
+              // Content
+              Padding(
+                padding: EdgeInsets.all(16.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 8.h),
 
-            const SizedBox(height: 24),
+                    // Stats Row
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatCard(
+                            'আজকের পয়েন্ট',
+                            '০',
+                            Icons.star,
+                            const Color(0xFFFFC107),
+                          ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: _buildStatCard(
+                            'মোট কাজ',
+                            '০',
+                            Icons.task_alt,
+                            const Color(0xFF673AB7),
+                          ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: _buildStatCard(
+                            'সম্পন্ন',
+                            '০',
+                            Icons.done_all,
+                            const Color(0xFF4CAF50),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24.h),
 
-            // Quick Actions Grid
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 1.1,
-              children: [
-                _buildFeatureCard(
-                  'All Tracking',
-                  'Track your daily ibadah',
-                  Icons.track_changes,
-                  () => Get.toNamed(Routes.trackingOverview),
-                ),
-                _buildFeatureCard(
-                  'Leaderboard',
-                  'Check Rankings',
-                  Icons.leaderboard,
-                  () => Get.toNamed(Routes.leaderboard),
-                ),
-                _buildFeatureCard(
-                  'Tasks',
-                  'View Daily Tasks',
-                  Icons.task,
-                  () => Get.toNamed(Routes.koroniyo),
-                ),
-                _buildFeatureCard(
-                  'Dua List',
-                  'Daily Duas',
-                  Icons.menu_book,
-                  () => Get.toNamed(Routes.duaList),
-                ),
-              ],
-            ),
+                    // Prayer Times Card
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () => Get.toNamed(Routes.prayerTimes),
+                          borderRadius: BorderRadius.circular(16.r),
+                          child: Padding(
+                            padding: EdgeInsets.all(20.w),
+                            child: Column(
+                              children: [
+                                // Header
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(12.w),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primary.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(12.r),
+                                      ),
+                                      child: Icon(
+                                        Icons.mosque_outlined,
+                                        color: AppColors.primary,
+                                        size: 28.sp,
+                                      ),
+                                    ),
+                                    SizedBox(width: 16.w),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'নামাজের সময়',
+                                            style: TextStyle(
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xFF1A1A1A),
+                                            ),
+                                          ),
+                                          SizedBox(height: 2.h),
+                                          Obx(
+                                            () => Text(
+                                              prayerController.currentLocation.value,
+                                              style: TextStyle(
+                                                fontSize: 12.sp,
+                                                color: Colors.grey[600],
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 16.h),
+                                
+                                // Divider
+                                Container(
+                                  height: 1,
+                                  color: Colors.grey[200],
+                                ),
+                                SizedBox(height: 16.h),
 
-            const SizedBox(height: 24),
+                                // Prayer Info
+                                Obx(
+                                  () => Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'বর্তমান নামাজ',
+                                            style: TextStyle(
+                                              fontSize: 11.sp,
+                                              color: Colors.grey[600],
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4.h),
+                                          Text(
+                                            prayerController.currentPrayer.value,
+                                            style: TextStyle(
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.primary,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4.h),
+                                          Text(
+                                            prayerController.currentPrayerTime.value,
+                                            style: TextStyle(
+                                              fontSize: 12.sp,
+                                              color: Colors.grey[500],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        width: 1,
+                                        height: 60.h,
+                                        color: Colors.grey[200],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            'পরবর্তী নামাজ',
+                                            style: TextStyle(
+                                              fontSize: 11.sp,
+                                              color: Colors.grey[600],
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4.h),
+                                          Text(
+                                            prayerController.nextPrayer.value,
+                                            style: TextStyle(
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.primary,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4.h),
+                                          Text(
+                                            prayerController.timeUntilNextPrayer.value,
+                                            style: TextStyle(
+                                              fontSize: 12.sp,
+                                              color: Colors.grey[500],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 28.h),
 
-            // Quick Access Section
-            const Text(
-              'Quick Access',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            _buildQuickAccessItem(
-              'Borjoniyo Tasks',
-              'Important tasks for today',
-              Icons.priority_high,
-              () => Get.toNamed(Routes.borjoniyo),
-            ),
-            const SizedBox(height: 12),
-            _buildQuickAccessItem(
-              'Koroniyo Tasks',
-              'Daily tasks to complete',
-              Icons.task,
-              () => Get.toNamed(Routes.koroniyo),
-            ),
-            const SizedBox(height: 12),
-            _buildQuickAccessItem(
-              'Leaderboard',
-              'Check your ranking',
-              Icons.leaderboard,
-              () => Get.toNamed(Routes.leaderboard),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+                    // Daily Inspiration Section
+                    Text(
+                      'দৈনিক অনুপ্রেরণা',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF1A1A1A),
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
 
-  // Helper widgets
-  Widget _buildStatColumn(String label, String value, IconData icon) {
-    return Column(
-      children: [
-        Icon(icon, color: AppColors.primary, size: 24),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey.shade600,
-          ),
-        ),
-      ],
-    );
-  }
+                    InkWell(
+                      onTap: controller.cycleQuoteType,
+                      child: Obx(
+                        () => QuoteWidget(
+                          title: controller.currentQuoteType.value == 'hadith'
+                              ? 'নির্বাচিত হাদিস'
+                              : controller.currentQuoteType.value == 'ayat'
+                                  ? 'আজকের আয়াত'
+                                  : 'সালাফদের বক্তব্য',
+                          text: controller.currentQuote.value,
+                          type: controller.currentQuoteType.value,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 28.h),
 
-  Widget _buildFeatureCard(String title, String subtitle, IconData icon, VoidCallback onTap) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(15),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 32, color: AppColors.primary),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
+                    // Quick Actions Section
+                    Text(
+                      'দ্রুত অ্যাক্সেস',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF1A1A1A),
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 12.h,
+                      crossAxisSpacing: 12.w,
+                      childAspectRatio: 0.95,
+                      children: [
+                        _buildFeatureCard(
+                          'ট্র্যাকিং',
+                          'ইবাদত ট্র্যাক করুন',
+                          Icons.track_changes,
+                          const Color(0xFF2196F3),
+                          () => Get.toNamed(Routes.trackingOverview),
+                        ),
+                        _buildFeatureCard(
+                          'লিডারবোর্ড',
+                          'র‍্যাঙ্কিং দেখুন',
+                          Icons.leaderboard,
+                          const Color(0xFF4CAF50),
+                          () => Get.toNamed(Routes.leaderboard),
+                        ),
+                        _buildFeatureCard(
+                          'কাজ',
+                          'দৈনিক কাজ',
+                          Icons.task,
+                          const Color(0xFFFFC107),
+                          () => Get.toNamed(Routes.koroniyo),
+                        ),
+                        _buildFeatureCard(
+                          'দোয়া',
+                          'দৈনিক দোয়া',
+                          Icons.menu_book,
+                          const Color(0xFFFF9800),
+                          () => Get.toNamed(Routes.duaList),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 28.h),
+
+                    // More Actions Section
+                    Text(
+                      'আরও বিকল্প',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF1A1A1A),
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+
+                    _buildActionListItem(
+                      'অপরিহার্য কাজ',
+                      'আজকের জরুরি কাজ',
+                      Icons.priority_high,
+                      const Color(0xFFC41C3B),
+                      () => Get.toNamed(Routes.borjoniyo),
+                    ),
+                    SizedBox(height: 10.h),
+
+                    _buildActionListItem(
+                      'সকল কাজ',
+                      'সম্পূর্ণ কাজের তালিকা',
+                      Icons.task_alt,
+                      const Color(0xFF673AB7),
+                      () => Get.toNamed(Routes.koroniyo),
+                    ),
+                    SizedBox(height: 10.h),
+
+                    _buildActionListItem(
+                      'লিডারবোর্ড',
+                      'আপনার র‍্যাঙ্ক দেখুন',
+                      Icons.emoji_events,
+                      AppColors.primary,
+                      () => Get.toNamed(Routes.leaderboard),
+                    ),
+                    SizedBox(height: 24.h),
+                  ],
                 ),
               ),
             ],
@@ -342,19 +426,191 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget _buildQuickAccessItem(String title, String subtitle, IconData icon, VoidCallback onTap) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
+  Widget _buildStatCard(String label, String value, IconData icon, Color color) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14.r),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(8.w),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            child: Icon(icon, color: color, size: 20.sp),
+          ),
+          SizedBox(height: 12.h),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF1A1A1A),
+            ),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11.sp,
+              color: Colors.grey[600],
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeatureCard(
+    String title,
+    String subtitle,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
         onTap: onTap,
-        leading: CircleAvatar(
-          backgroundColor: AppColors.primary.withOpacity(0.1),
-          child: Icon(icon, color: AppColors.primary),
+        borderRadius: BorderRadius.circular(14.r),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14.r),
+            border: Border.all(
+              color: color.withOpacity(0.1),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: color.withOpacity(0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 50.w,
+                height: 50.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: color.withOpacity(0.15),
+                ),
+                child: Icon(icon, color: color, size: 26.sp),
+              ),
+              SizedBox(height: 12.h),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF1A1A1A),
+                ),
+              ),
+              SizedBox(height: 3.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
-        title: Text(title),
-        subtitle: Text(subtitle),
-        trailing: const Icon(Icons.chevron_right),
+      ),
+    );
+  }
+
+  Widget _buildActionListItem(
+    String title,
+    String subtitle,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12.r),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.08),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+          child: Row(
+            children: [
+              Container(
+                width: 46.w,
+                height: 46.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: color.withOpacity(0.1),
+                ),
+                child: Icon(icon, color: color, size: 22.sp),
+              ),
+              SizedBox(width: 14.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF1A1A1A),
+                      ),
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: Colors.grey[400],
+                size: 20.sp,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
